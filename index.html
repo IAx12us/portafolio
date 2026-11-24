@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portafolio Audiovisual — Minimalista</title>
+<html lang="es" class="scroll-smooth"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Andreé Arias — Productor Audiovisual &amp; Editor</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts: Inter -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -27,7 +25,6 @@
       }
     };
   </script>
-
   <style>
     body {
       background-color: #09090b;
@@ -50,7 +47,7 @@
       background-color: rgba(255, 255, 255, 0.04);
     }
 
-    /* Ajuste estricto 16:9 sin recortes ni franjas desplazadas */
+    /* Contenedor horizontal 16:9 */
     .media-frame {
       position: relative;
       width: 100%;
@@ -59,11 +56,22 @@
       overflow: hidden;
     }
 
-    /* Vimeo, YouTube, video nativo e imágenes ocupan el 100% exacto */
-    .media-frame iframe.vimeo-frame,
-    .media-frame iframe.yt-frame,
+    /* Contenedor vertical 9:16 */
+    .media-frame-vertical {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      background-color: #000000;
+      overflow: hidden;
+    }
+
+    /* Reproductores estándar (Vimeo, YouTube, MP4, Imagen) al 100% exacto */
+    .media-frame iframe.std-embed,
+    .media-frame-vertical iframe.std-embed,
     .media-frame video,
-    .media-frame img {
+    .media-frame img,
+    .media-frame-vertical video,
+    .media-frame-vertical img {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -72,8 +80,8 @@
       display: block;
     }
 
-    /* Google Drive compensa la barra negra interna superior del reproductor */
-    .media-frame iframe.drive-frame {
+    /* Ajuste específico para Google Drive en 16:9 para ocultar barra superior */
+    .media-frame iframe.drive-embed {
       position: absolute;
       top: -17.5%;
       left: 0;
@@ -83,680 +91,930 @@
       display: block;
     }
 
-    .media-frame video,
-    .media-frame img {
-      object-fit: cover;
+    /* Ajuste específico para Google Drive en vertical 9:16 */
+    .media-frame-vertical iframe.drive-embed {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
     }
 
-    /* Barra de desplazamiento minimalista */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+    /* Ocultar scrollbar en carrusel horizontal */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
     }
-    ::-webkit-scrollbar-track {
-      background: #09090b;
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
-    ::-webkit-scrollbar-thumb {
-      background: #27272a;
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #3f3f46;
+
+    /* Ocultar controles de edición cuando NO está activo el modo edición */
+    body:not(.editing-active) .edit-only {
+      display: none !important;
     }
   </style>
-</head>
-<body class="bg-obsidian text-zinc-100 antialiased selection:bg-white selection:text-black">
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.inset-x-0{left:0px;right:0px}.top-0{top:0px}.top-12{top:3rem}.right-2\.5{right:0.625rem}.top-2\.5{top:0.625rem}.z-0{z-index:0}.z-10{z-index:10}.z-40{z-index:40}.z-50{z-index:50}.z-20{z-index:20}.mx-auto{margin-left:auto;margin-right:auto}.mb-1\.5{margin-bottom:0.375rem}.mb-10{margin-bottom:2.5rem}.mb-6{margin-bottom:1.5rem}.ml-2{margin-left:0.5rem}.mt-1{margin-top:0.25rem}.mt-1\.5{margin-top:0.375rem}.mt-16{margin-top:4rem}.mb-3{margin-bottom:0.75rem}.ml-0\.5{margin-left:0.125rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-16{height:4rem}.h-2{height:0.5rem}.h-8{height:2rem}.h-full{height:100%}.h-10{height:2.5rem}.h-4{height:1rem}.h-7{height:1.75rem}.min-h-\[88vh\]{min-height:88vh}.w-2{width:0.5rem}.w-8{width:2rem}.w-full{width:100%}.w-10{width:2.5rem}.w-4{width:1rem}.w-7{width:1.75rem}.w-\[220px\]{width:220px}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-6xl{max-width:72rem}.max-w-lg{max-width:32rem}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.flex-none{flex:none}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-1\.5{gap:0.375rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.scroll-smooth{scroll-behavior:smooth}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-zinc-700{--tw-border-opacity:1;border-color:rgb(63 63 70 / var(--tw-border-opacity, 1))}.border-zinc-700\/80{border-color:rgb(63 63 70 / 0.8)}.border-zinc-800{--tw-border-opacity:1;border-color:rgb(39 39 42 / var(--tw-border-opacity, 1))}.border-zinc-800\/80{border-color:rgb(39 39 42 / 0.8)}.border-zinc-900{--tw-border-opacity:1;border-color:rgb(24 24 27 / var(--tw-border-opacity, 1))}.border-zinc-900\/90{border-color:rgb(24 24 27 / 0.9)}.border-borderline{--tw-border-opacity:1;border-color:rgb(31 31 36 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-emerald-400{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-zinc-900{--tw-bg-opacity:1;background-color:rgb(24 24 27 / var(--tw-bg-opacity, 1))}.bg-zinc-900\/90{background-color:rgb(24 24 27 / 0.9)}.bg-zinc-950{--tw-bg-opacity:1;background-color:rgb(9 9 11 / var(--tw-bg-opacity, 1))}.bg-zinc-950\/90{background-color:rgb(9 9 11 / 0.9)}.bg-black\/85{background-color:rgb(0 0 0 / 0.85)}.bg-surface{--tw-bg-opacity:1;background-color:rgb(18 18 22 / var(--tw-bg-opacity, 1))}.bg-gradient-to-b{background-image:linear-gradient(to bottom, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.bg-gradient-to-t{background-image:linear-gradient(to top, var(--tw-gradient-stops))}.from-\[\#09090b\]{--tw-gradient-from:#09090b var(--tw-gradient-from-position);--tw-gradient-to:rgb(9 9 11 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#09090b\]\/85{--tw-gradient-from:rgb(9 9 11 / 0.85) var(--tw-gradient-from-position);--tw-gradient-to:rgb(9 9 11 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-black\/80{--tw-gradient-from:rgb(0 0 0 / 0.8) var(--tw-gradient-from-position);--tw-gradient-to:rgb(0 0 0 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-\[\#09090b\]\/55{--tw-gradient-to:rgb(9 9 11 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(9 9 11 / 0.55) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-black\/40{--tw-gradient-to:rgb(0 0 0 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(0 0 0 / 0.4) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-transparent{--tw-gradient-to:rgb(0 0 0 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), transparent var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-\[\#09090b\]\/40{--tw-gradient-to:rgb(9 9 11 / 0.4) var(--tw-gradient-to-position)}.to-black\/50{--tw-gradient-to:rgb(0 0 0 / 0.5) var(--tw-gradient-to-position)}.to-transparent{--tw-gradient-to:transparent var(--tw-gradient-to-position)}.object-cover{object-fit:cover}.p-1{padding:0.25rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-5{padding:1.25rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-20{padding-top:5rem;padding-bottom:5rem}.py-24{padding-top:6rem;padding-bottom:6rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.pb-2{padding-bottom:0.5rem}.pb-20{padding-bottom:5rem}.pt-1{padding-top:0.25rem}.pt-12{padding-top:3rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.pt-36{padding-top:9rem}.text-center{text-align:center}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-light{font-weight:300}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-\[1\.08\]{line-height:1.08}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.tracking-\[0\.14em\]{letter-spacing:0.14em}.tracking-\[0\.22em\]{letter-spacing:0.22em}.tracking-\[0\.28em\]{letter-spacing:0.28em}.tracking-\[0\.2em\]{letter-spacing:0.2em}.tracking-tight{letter-spacing:-0.025em}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-zinc-200{--tw-text-opacity:1;color:rgb(228 228 231 / var(--tw-text-opacity, 1))}.text-zinc-300{--tw-text-opacity:1;color:rgb(212 212 216 / var(--tw-text-opacity, 1))}.text-zinc-400{--tw-text-opacity:1;color:rgb(161 161 170 / var(--tw-text-opacity, 1))}.text-zinc-500{--tw-text-opacity:1;color:rgb(113 113 122 / var(--tw-text-opacity, 1))}.text-zinc-700{--tw-text-opacity:1;color:rgb(63 63 70 / var(--tw-text-opacity, 1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.placeholder-zinc-500::placeholder{--tw-placeholder-opacity:1;color:rgb(113 113 122 / var(--tw-placeholder-opacity, 1))}.opacity-55{opacity:0.55}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.backdrop-blur-\[2px\]{--tw-backdrop-blur:blur(2px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.selection\:bg-white *::selection{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.selection\:text-black *::selection{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.selection\:bg-white::selection{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.selection\:text-black::selection{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.file\:mr-3::file-selector-button{margin-right:0.75rem}.file\:rounded-lg::file-selector-button{border-radius:0.5rem}.file\:border-0::file-selector-button{border-width:0px}.file\:bg-zinc-800::file-selector-button{--tw-bg-opacity:1;background-color:rgb(39 39 42 / var(--tw-bg-opacity, 1))}.file\:px-3\.5::file-selector-button{padding-left:0.875rem;padding-right:0.875rem}.file\:py-2::file-selector-button{padding-top:0.5rem;padding-bottom:0.5rem}.file\:text-xs::file-selector-button{font-size:0.75rem;line-height:1rem}.file\:font-medium::file-selector-button{font-weight:500}.file\:text-zinc-200::file-selector-button{--tw-text-opacity:1;color:rgb(228 228 231 / var(--tw-text-opacity, 1))}.hover\:border-zinc-700:hover{--tw-border-opacity:1;border-color:rgb(63 63 70 / var(--tw-border-opacity, 1))}.hover\:bg-red-500:hover{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.hover\:bg-red-950\/60:hover{background-color:rgb(69 10 10 / 0.6)}.hover\:bg-zinc-200:hover{--tw-bg-opacity:1;background-color:rgb(228 228 231 / var(--tw-bg-opacity, 1))}.hover\:bg-zinc-800:hover{--tw-bg-opacity:1;background-color:rgb(39 39 42 / var(--tw-bg-opacity, 1))}.hover\:bg-red-600:hover{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.hover\:bg-white:hover{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.hover\:text-red-300:hover{--tw-text-opacity:1;color:rgb(252 165 165 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:text-black:hover{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.hover\:file\:bg-zinc-700::file-selector-button:hover{--tw-bg-opacity:1;background-color:rgb(63 63 70 / var(--tw-bg-opacity, 1))}.focus\:border-white:focus{--tw-border-opacity:1;border-color:rgb(255 255 255 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}@media (min-width: 640px){.sm\:inline{display:inline}.sm\:w-\[250px\]{width:250px}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-6xl{font-size:3.75rem;line-height:1}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}</style></head>
+<body class="editing-active antialiased selection:bg-white selection:text-black">
 
-  <!-- Barra superior de control (oculta automáticamente en la web pública exportada) -->
-  <header id="editor-toolbar" class="fixed top-0 inset-x-0 z-50 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-2.5 transition-all">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-2.5">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span class="text-[11px] font-semibold tracking-[0.18em] uppercase text-zinc-300">Modo Edición Activo</span>
+  <!-- Barra superior de control (solo visible en modo edición) -->
+  <div id="editor-toolbar" class="edit-only fixed top-0 inset-x-0 z-50 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800/80 px-4 py-2.5">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5 text-xs text-zinc-400">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-medium text-zinc-200 tracking-wide">MODO EDICIÓN ACTIVO</span>
+        <span class="hidden sm:inline text-zinc-500">· Pega links de Vimeo, YouTube, Drive o imágenes con enlace</span>
       </div>
-
-      <div class="flex flex-wrap items-center gap-2">
-        <button type="button" onclick="openHeroModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-xs font-medium text-zinc-200 transition cursor-pointer">
-          <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-          <span>Video Portada</span>
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="openHeroModal()" class="px-3 py-1.5 text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700/80 rounded-lg transition cursor-pointer">
+          Video Portada
         </button>
-
-        <button type="button" id="toggle-preview-btn" onclick="togglePreviewMode()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-xs font-medium text-zinc-200 transition cursor-pointer">
-          <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-          <span>Vista Previa</span>
+        <button type="button" onclick="openResetModal()" class="px-3 py-1.5 text-xs font-medium bg-zinc-900 hover:bg-red-950/60 text-zinc-400 hover:text-red-300 border border-zinc-800 rounded-lg transition cursor-pointer">
+          Restaurar
         </button>
-
-        <button type="button" onclick="saveState(true)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-xs font-medium text-zinc-200 transition cursor-pointer">
-          <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
-          <span>Guardar</span>
-        </button>
-
-        <button type="button" onclick="exportCleanHTML()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white hover:bg-zinc-200 text-xs font-semibold text-zinc-950 transition shadow-sm cursor-pointer">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-          <span>Exportar Web</span>
-        </button>
-
-        <button type="button" onclick="openResetModal()" title="Reiniciar valores por defecto" class="p-1.5 rounded-lg bg-zinc-900 hover:bg-red-950/60 border border-zinc-700/80 hover:border-red-800/70 text-zinc-400 hover:text-red-400 transition cursor-pointer">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        <button type="button" onclick="exportCleanHTML()" class="px-3.5 py-1.5 text-xs font-semibold bg-white hover:bg-zinc-200 text-black rounded-lg transition shadow-sm cursor-pointer">
+          Exportar Web (index.html)
         </button>
       </div>
     </div>
+  </div>
+
+  <!-- Navegación minimalista -->
+  <header id="main-header" class="fixed top-12 inset-x-0 z-40 transition-all duration-300 bg-gradient-to-b from-black/80 via-black/40 to-transparent backdrop-blur-[2px]">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="#inicio" contenteditable="true" data-field="brandName" class="text-sm font-semibold tracking-[0.22em] uppercase text-white">ANDREÉ ARIAS</a>
+      <nav class="flex items-center gap-6 text-xs font-medium tracking-wider uppercase text-zinc-300">
+        <a href="#proyectos" class="hover:text-white transition">Proyectos</a>
+        <a href="#streaming" class="hover:text-white transition">Streaming &amp; Podcast</a>
+        <a href="#contacto" class="hover:text-white transition">Contacto</a>
+      </nav>
+    </div>
   </header>
 
-  <!-- Botón flotante para volver desde Vista Previa -->
-  <button type="button" id="exit-preview-fab" onclick="togglePreviewMode()" class="hidden fixed bottom-5 right-5 z-50 px-4 py-2.5 rounded-full bg-zinc-900/95 hover:bg-zinc-800 border border-zinc-700 text-xs font-medium text-white shadow-2xl backdrop-blur-md cursor-pointer">
-    Volver a editar
-  </button>
+  <!-- HERO SECTION -->
+  <section id="inicio" class="relative min-h-[88vh] flex items-end pb-20 pt-36 overflow-hidden">
+    <!-- Video de fondo en bucle silencioso con fundido orgánico inferior -->
+    <div id="hero-media-container" class="absolute inset-0 z-0 bg-[#09090b]">
+      <video id="hero-video" src="./hero.mp4" autoplay="" loop="" muted="" playsinline="" class="w-full h-full object-cover opacity-55"></video>
+      <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/45 to-black/50"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-[#09090b]/85 via-transparent to-[#09090b]/40"></div>
+      <div class="absolute bottom-0 inset-x-0 h-56 bg-gradient-to-t from-[#09090b] via-[#09090b]/90 to-transparent pointer-events-none"></div>
+    </div>
 
-  <!-- PORTADA FULLSCREEN (HERO 100vh) -->
-  <section id="hero-section" class="relative w-full h-screen min-h-[580px] flex items-end overflow-hidden bg-black">
-    <!-- Video de fondo en bucle silencioso -->
-    <div id="hero-media-container" class="absolute inset-0 w-full h-full z-0 pointer-events-none"></div>
-
-    <!-- Gradiente editorial oscuro para contraste limpio -->
-    <div class="absolute inset-0 z-10 bg-gradient-to-t from-[#09090b] via-[#09090b]/45 to-black/40 pointer-events-none"></div>
-    <div class="absolute inset-0 z-10 bg-gradient-to-r from-[#09090b]/85 via-[#09090b]/35 to-transparent pointer-events-none"></div>
-
-    <!-- Botón flotante para cambiar video de fondo en modo edición -->
-    <button type="button" onclick="openHeroModal()" class="edit-only hidden absolute top-20 right-5 sm:right-8 z-30 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-950/80 hover:bg-zinc-900 border border-zinc-700/80 text-xs font-medium text-zinc-200 backdrop-blur-md transition shadow-lg cursor-pointer">
-      <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-      <span>Cambiar video de fondo</span>
-    </button>
-
-    <!-- Contenido editorial de portada -->
-    <div class="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-10 pb-14 sm:pb-20 flex items-end justify-between gap-6">
-      <div class="max-w-2xl space-y-4">
-        <p id="hero-location" data-field="location" class="text-[11px] sm:text-xs font-medium tracking-[0.26em] uppercase text-zinc-300/90">
-          PRODUCTOR AUDIOVISUAL · LIMA, PERÚ
-        </p>
-
-        <h1 id="hero-name" data-field="name" class="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight uppercase text-white leading-[1.02]">
-          ANDRÉ ARIAS
-        </h1>
-
-        <p id="hero-bio" data-field="bio" class="text-sm sm:text-base text-zinc-300/90 font-normal leading-relaxed max-w-xl">
-          BAJADA DESCRIPCIÓN PROFESIONAL — Dirección audiovisual, montaje y narrativa visual minimalista para marcas, cine documental y proyectos comerciales.
-        </p>
-
-        <div class="pt-3">
-          <a href="#proyectos" class="inline-flex items-center gap-3 px-6 py-3 rounded-none border border-white/35 hover:border-white hover:bg-white hover:text-black text-xs font-semibold tracking-[0.22em] uppercase text-white transition-all duration-300">
-            <span id="hero-cta" data-field="cta">VER PROYECTOS</span>
-            <span aria-hidden="true">→</span>
+    <div class="relative z-10 max-w-6xl mx-auto px-6 w-full">
+      <div class="max-w-3xl space-y-5">
+        <p contenteditable="true" data-field="heroTag" class="text-xs font-medium tracking-[0.28em] uppercase text-zinc-400">PRODUCTOR AUDIOVISUAL · EDITOR DE VIDEO · MOTION GRAPHICS</p>
+        <h1 contenteditable="true" data-field="heroTitle" class="text-4xl sm:text-6xl font-semibold tracking-tight text-white leading-[1.08]">Andre Arias</h1>
+        <p contenteditable="true" data-field="heroSubtitle" class="text-base sm:text-lg text-zinc-300 font-light leading-relaxed max-w-2xl">Edición 4K, gráficos en movimiento 2D/3D, producción para streaming y contenido comercial diseñado para retener audiencia y potenciar resultados.</p>
+        <div class="pt-3 flex flex-wrap items-center gap-4">
+          <a href="#proyectos" class="px-5 py-2.5 text-xs font-medium tracking-widest uppercase bg-white text-black rounded-lg hover:bg-zinc-200 transition">
+            Ver Proyectos →
           </a>
+          <button type="button" onclick="openHeroModal()" class="edit-only px-4 py-2.5 text-xs font-medium tracking-wider uppercase bg-zinc-900/90 text-zinc-200 border border-zinc-700 rounded-lg hover:bg-zinc-800 transition cursor-pointer">
+            Cambiar Video de Portada
+          </button>
         </div>
-      </div>
-
-      <!-- Indicador vertical SCROLL -->
-      <div class="hidden sm:flex flex-col items-center gap-3 pb-1 text-zinc-400 select-none">
-        <span class="text-[10px] tracking-[0.3em] uppercase [writing-mode:vertical-rl] rotate-180">SCROLL</span>
-        <span class="w-px h-12 bg-gradient-to-b from-zinc-400 to-transparent"></span>
       </div>
     </div>
   </section>
 
-  <!-- CONTENEDOR PRINCIPAL DE PROYECTOS (2 COLUMNAS AMPLIAS, SIN CUADROS DE DESCRIPCIÓN) -->
-  <main id="proyectos" class="max-w-7xl mx-auto px-6 sm:px-10 py-20 sm:py-28 space-y-24">
-    <div id="sections-container" class="space-y-24"></div>
-  </main>
-
-  <!-- MODAL: VIDEO DE FONDO DE PORTADA -->
-  <div id="hero-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="w-full max-w-md rounded-2xl bg-zinc-900 border border-zinc-800 p-6 shadow-2xl space-y-5">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-200">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-          </div>
-          <h3 class="text-sm font-semibold text-white">Video de Fondo de Portada</h3>
+  <!-- SECCIÓN 1: PROYECTOS DESTACADOS (HORIZONTALES + CARRUSEL VERTICAL INTEGRADO) -->
+  <section id="proyectos" class="py-24 border-b border-zinc-900">
+    <div class="max-w-6xl mx-auto px-6">
+      <!-- Encabezado de Sección -->
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-10">
+        <div>
+          <h2 contenteditable="true" data-field="sec1Title" class="text-xl sm:text-2xl font-semibold tracking-[0.14em] uppercase text-white">PROYECTOS DESTACADOS</h2>
         </div>
-        <button type="button" onclick="closeHeroModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg cursor-pointer">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </div>
-
-      <p class="text-xs text-zinc-400 leading-relaxed">
-        Usa <code class="text-zinc-200 bg-zinc-800 px-1.5 py-0.5 rounded">./hero.mp4</code> (si subiste <span class="text-zinc-200">hero.mp4</span> a tu repositorio en GitHub), o pega un enlace de Vimeo, YouTube o Google Drive.
-      </p>
-
-      <div class="space-y-2">
-        <label for="hero-url-input" class="block text-xs font-medium text-zinc-300">Ruta local (./hero.mp4) o enlace de video</label>
-        <input id="hero-url-input" type="text" placeholder="./hero.mp4" class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 focus:border-white focus:outline-none text-xs text-white placeholder-zinc-600" />
-      </div>
-
-      <div class="relative flex py-1 items-center">
-        <div class="flex-grow border-t border-zinc-800"></div>
-        <span class="flex-shrink mx-3 text-[10px] uppercase tracking-widest text-zinc-500">o sube desde tu computadora</span>
-        <div class="flex-grow border-t border-zinc-800"></div>
-      </div>
-
-      <label class="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl border border-dashed border-zinc-700 hover:border-zinc-500 bg-zinc-950/60 hover:bg-zinc-950 text-xs text-zinc-300 cursor-pointer transition">
-        <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-        <span id="hero-file-label">Seleccionar archivo MP4 o WebM (máx. 4 MB)</span>
-        <input id="hero-file-input" type="file" accept="video/mp4,video/webm" class="hidden" onchange="handleHeroFileSelect(event)" />
-      </label>
-
-      <p id="hero-modal-error" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-900/60 rounded-xl p-3"></p>
-
-      <div class="flex items-center justify-between pt-2">
-        <button type="button" onclick="resetHeroVideo()" class="text-xs text-zinc-400 hover:text-zinc-200 cursor-pointer">
-          Usar ./hero.mp4
-        </button>
-        <div class="flex items-center gap-2">
-          <button type="button" onclick="closeHeroModal()" class="px-3.5 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-200 cursor-pointer">
-            Cancelar
+        <div class="edit-only flex items-center gap-2">
+          <button type="button" onclick="addCard('featured')" class="px-3.5 py-2 text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700/80 rounded-lg transition cursor-pointer">
+            + Añadir horizontal
           </button>
-          <button type="button" onclick="applyHeroVideo()" class="px-4 py-2 rounded-xl bg-white hover:bg-zinc-200 text-xs font-semibold text-black cursor-pointer">
-            Aplicar Video
+        </div>
+      </div>
+
+      <!-- Cuadrícula de Videos Horizontales 16:9 -->
+      <div id="grid-featured" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="group relative rounded-xl overflow-hidden bg-surface border border-borderline hover:border-zinc-700 transition">
+          <!-- Controles flotantes solo en modo edición -->
+          <div class="edit-only absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5">
+            <button type="button" onclick="openCardModal('featured', 0)" class="px-2.5 py-1 text-[11px] font-medium bg-black/85 hover:bg-white text-white hover:text-black border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              Enlazar
+            </button>
+            <button type="button" onclick="removeCard('featured', 0)" title="Eliminar bloque" class="w-7 h-7 flex items-center justify-center text-xs bg-black/85 hover:bg-red-600 text-zinc-300 hover:text-white border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              ×
+            </button>
+          </div>
+
+          <div class="media-frame">
+            
+          <div class="w-full h-full flex flex-col items-center justify-center text-center p-5 bg-zinc-950/90">
+            <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center mb-3 text-zinc-400">
+              <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </div>
+            <span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-zinc-300">
+              VIDEO / IMAGEN
+            </span>
+            <span class="edit-only text-[11px] text-zinc-500 mt-1.5">
+              + Pegar link de Vimeo, YouTube, Drive o imagen
+            </span>
+          </div>
+        
+          </div>
+        </div>
+      
+        <div class="group relative rounded-xl overflow-hidden bg-surface border border-borderline hover:border-zinc-700 transition">
+          <!-- Controles flotantes solo en modo edición -->
+          <div class="edit-only absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5">
+            <button type="button" onclick="openCardModal('featured', 1)" class="px-2.5 py-1 text-[11px] font-medium bg-black/85 hover:bg-white text-white hover:text-black border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              Enlazar
+            </button>
+            <button type="button" onclick="removeCard('featured', 1)" title="Eliminar bloque" class="w-7 h-7 flex items-center justify-center text-xs bg-black/85 hover:bg-red-600 text-zinc-300 hover:text-white border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              ×
+            </button>
+          </div>
+
+          <div class="media-frame">
+            
+          <div class="w-full h-full flex flex-col items-center justify-center text-center p-5 bg-zinc-950/90">
+            <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center mb-3 text-zinc-400">
+              <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </div>
+            <span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-zinc-300">
+              VIDEO / IMAGEN
+            </span>
+            <span class="edit-only text-[11px] text-zinc-500 mt-1.5">
+              + Pegar link de Vimeo, YouTube, Drive o imagen
+            </span>
+          </div>
+        
+          </div>
+        </div>
+      
+        <div class="group relative rounded-xl overflow-hidden bg-surface border border-borderline hover:border-zinc-700 transition">
+          <!-- Controles flotantes solo en modo edición -->
+          <div class="edit-only absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5">
+            <button type="button" onclick="openCardModal('featured', 2)" class="px-2.5 py-1 text-[11px] font-medium bg-black/85 hover:bg-white text-white hover:text-black border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              Enlazar
+            </button>
+            <button type="button" onclick="removeCard('featured', 2)" title="Eliminar bloque" class="w-7 h-7 flex items-center justify-center text-xs bg-black/85 hover:bg-red-600 text-zinc-300 hover:text-white border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              ×
+            </button>
+          </div>
+
+          <div class="media-frame">
+            
+          <div class="w-full h-full flex flex-col items-center justify-center text-center p-5 bg-zinc-950/90">
+            <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center mb-3 text-zinc-400">
+              <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </div>
+            <span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-zinc-300">
+              VIDEO / IMAGEN
+            </span>
+            <span class="edit-only text-[11px] text-zinc-500 mt-1.5">
+              + Pegar link de Vimeo, YouTube, Drive o imagen
+            </span>
+          </div>
+        
+          </div>
+        </div>
+      
+        <div class="group relative rounded-xl overflow-hidden bg-surface border border-borderline hover:border-zinc-700 transition">
+          <!-- Controles flotantes solo en modo edición -->
+          <div class="edit-only absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5">
+            <button type="button" onclick="openCardModal('featured', 3)" class="px-2.5 py-1 text-[11px] font-medium bg-black/85 hover:bg-white text-white hover:text-black border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              Enlazar
+            </button>
+            <button type="button" onclick="removeCard('featured', 3)" title="Eliminar bloque" class="w-7 h-7 flex items-center justify-center text-xs bg-black/85 hover:bg-red-600 text-zinc-300 hover:text-white border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              ×
+            </button>
+          </div>
+
+          <div class="media-frame">
+            
+          <div class="w-full h-full flex flex-col items-center justify-center text-center p-5 bg-zinc-950/90">
+            <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center mb-3 text-zinc-400">
+              <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </div>
+            <span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-zinc-300">
+              VIDEO / IMAGEN
+            </span>
+            <span class="edit-only text-[11px] text-zinc-500 mt-1.5">
+              + Pegar link de Vimeo, YouTube, Drive o imagen
+            </span>
+          </div>
+        
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-bloque integrado: Carrusel de Clips Verticales 9:16 -->
+      <div class="mt-16 pt-12 border-t border-zinc-900/90">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div class="flex items-center gap-3">
+            <h3 contenteditable="true" data-field="verticalTitle" class="text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase text-zinc-300">CLIPS VERTICALES · REELS &amp; SHORTS</h3>
+          </div>
+          <div class="flex items-center gap-2">
+            <!-- Controles de navegación del carrusel -->
+            <button type="button" onclick="scrollVerticalCarousel(-1)" aria-label="Anterior" class="w-8 h-8 flex items-center justify-center rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 transition cursor-pointer">
+              ‹
+            </button>
+            <button type="button" onclick="scrollVerticalCarousel(1)" aria-label="Siguiente" class="w-8 h-8 flex items-center justify-center rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 transition cursor-pointer">
+              ›
+            </button>
+            <button type="button" onclick="addVerticalCard()" class="edit-only ml-2 px-3.5 py-1.5 text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700/80 rounded-lg transition cursor-pointer">
+              + Añadir vertical
+            </button>
+          </div>
+        </div>
+
+        <!-- Pista del carrusel vertical -->
+        <div id="carousel-vertical" class="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth pb-2">
+        <div class="group relative flex-none w-[220px] sm:w-[250px] rounded-xl overflow-hidden bg-surface border border-borderline hover:border-zinc-700 transition">
+          <!-- Controles flotantes solo en modo edición -->
+          <div class="edit-only absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5">
+            <button type="button" onclick="openCardModal('vertical', 0)" class="px-2.5 py-1 text-[11px] font-medium bg-black/85 hover:bg-white text-white hover:text-black border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              Enlazar
+            </button>
+            <button type="button" onclick="removeCard('vertical', 0)" title="Eliminar bloque" class="w-7 h-7 flex items-center justify-center text-xs bg-black/85 hover:bg-red-600 text-zinc-300 hover:text-white border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              ×
+            </button>
+          </div>
+
+          <div class="media-frame-vertical">
+            
+          <div class="w-full h-full flex flex-col items-center justify-center text-center p-5 bg-zinc-950/90">
+            <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center mb-3 text-zinc-400">
+              <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </div>
+            <span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-zinc-300">
+              CLIP 9:16
+            </span>
+            <span class="edit-only text-[11px] text-zinc-500 mt-1.5">
+              + Pegar link de Vimeo, YouTube, Drive o imagen
+            </span>
+          </div>
+        
+          </div>
+        </div>
+      
+        <div class="group relative flex-none w-[220px] sm:w-[250px] rounded-xl overflow-hidden bg-surface border border-borderline hover:border-zinc-700 transition">
+          <!-- Controles flotantes solo en modo edición -->
+          <div class="edit-only absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5">
+            <button type="button" onclick="openCardModal('vertical', 1)" class="px-2.5 py-1 text-[11px] font-medium bg-black/85 hover:bg-white text-white hover:text-black border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              Enlazar
+            </button>
+            <button type="button" onclick="removeCard('vertical', 1)" title="Eliminar bloque" class="w-7 h-7 flex items-center justify-center text-xs bg-black/85 hover:bg-red-600 text-zinc-300 hover:text-white border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              ×
+            </button>
+          </div>
+
+          <div class="media-frame-vertical">
+            
+          <div class="w-full h-full flex flex-col items-center justify-center text-center p-5 bg-zinc-950/90">
+            <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center mb-3 text-zinc-400">
+              <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </div>
+            <span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-zinc-300">
+              CLIP 9:16
+            </span>
+            <span class="edit-only text-[11px] text-zinc-500 mt-1.5">
+              + Pegar link de Vimeo, YouTube, Drive o imagen
+            </span>
+          </div>
+        
+          </div>
+        </div>
+      
+        <div class="group relative flex-none w-[220px] sm:w-[250px] rounded-xl overflow-hidden bg-surface border border-borderline hover:border-zinc-700 transition">
+          <!-- Controles flotantes solo en modo edición -->
+          <div class="edit-only absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5">
+            <button type="button" onclick="openCardModal('vertical', 2)" class="px-2.5 py-1 text-[11px] font-medium bg-black/85 hover:bg-white text-white hover:text-black border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              Enlazar
+            </button>
+            <button type="button" onclick="removeCard('vertical', 2)" title="Eliminar bloque" class="w-7 h-7 flex items-center justify-center text-xs bg-black/85 hover:bg-red-600 text-zinc-300 hover:text-white border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              ×
+            </button>
+          </div>
+
+          <div class="media-frame-vertical">
+            
+          <div class="w-full h-full flex flex-col items-center justify-center text-center p-5 bg-zinc-950/90">
+            <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center mb-3 text-zinc-400">
+              <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </div>
+            <span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-zinc-300">
+              CLIP 9:16
+            </span>
+            <span class="edit-only text-[11px] text-zinc-500 mt-1.5">
+              + Pegar link de Vimeo, YouTube, Drive o imagen
+            </span>
+          </div>
+        
+          </div>
+        </div>
+      
+        <div class="group relative flex-none w-[220px] sm:w-[250px] rounded-xl overflow-hidden bg-surface border border-borderline hover:border-zinc-700 transition">
+          <!-- Controles flotantes solo en modo edición -->
+          <div class="edit-only absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5">
+            <button type="button" onclick="openCardModal('vertical', 3)" class="px-2.5 py-1 text-[11px] font-medium bg-black/85 hover:bg-white text-white hover:text-black border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              Enlazar
+            </button>
+            <button type="button" onclick="removeCard('vertical', 3)" title="Eliminar bloque" class="w-7 h-7 flex items-center justify-center text-xs bg-black/85 hover:bg-red-600 text-zinc-300 hover:text-white border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              ×
+            </button>
+          </div>
+
+          <div class="media-frame-vertical">
+            
+          <div class="w-full h-full flex flex-col items-center justify-center text-center p-5 bg-zinc-950/90">
+            <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center mb-3 text-zinc-400">
+              <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </div>
+            <span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-zinc-300">
+              CLIP 9:16
+            </span>
+            <span class="edit-only text-[11px] text-zinc-500 mt-1.5">
+              + Pegar link de Vimeo, YouTube, Drive o imagen
+            </span>
+          </div>
+        
+          </div>
+        </div>
+      
+        <div class="group relative flex-none w-[220px] sm:w-[250px] rounded-xl overflow-hidden bg-surface border border-borderline hover:border-zinc-700 transition">
+          <!-- Controles flotantes solo en modo edición -->
+          <div class="edit-only absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5">
+            <button type="button" onclick="openCardModal('vertical', 4)" class="px-2.5 py-1 text-[11px] font-medium bg-black/85 hover:bg-white text-white hover:text-black border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              Enlazar
+            </button>
+            <button type="button" onclick="removeCard('vertical', 4)" title="Eliminar bloque" class="w-7 h-7 flex items-center justify-center text-xs bg-black/85 hover:bg-red-600 text-zinc-300 hover:text-white border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              ×
+            </button>
+          </div>
+
+          <div class="media-frame-vertical">
+            
+          <div class="w-full h-full flex flex-col items-center justify-center text-center p-5 bg-zinc-950/90">
+            <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center mb-3 text-zinc-400">
+              <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </div>
+            <span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-zinc-300">
+              CLIP 9:16
+            </span>
+            <span class="edit-only text-[11px] text-zinc-500 mt-1.5">
+              + Pegar link de Vimeo, YouTube, Drive o imagen
+            </span>
+          </div>
+        
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 2: STREAMING & PODCAST -->
+  <section id="streaming" class="py-24 border-b border-zinc-900">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-10">
+        <div>
+          <h2 contenteditable="true" data-field="sec2Title" class="text-xl sm:text-2xl font-semibold tracking-[0.14em] uppercase text-white">STREAMING &amp; PODCAST</h2>
+        </div>
+        <div class="edit-only flex items-center gap-2">
+          <button type="button" onclick="addCard('streaming')" class="px-3.5 py-2 text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700/80 rounded-lg transition cursor-pointer">
+            + Añadir bloque
           </button>
+        </div>
+      </div>
+
+      <div id="grid-streaming" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="group relative rounded-xl overflow-hidden bg-surface border border-borderline hover:border-zinc-700 transition">
+          <!-- Controles flotantes solo en modo edición -->
+          <div class="edit-only absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5">
+            <button type="button" onclick="openCardModal('streaming', 0)" class="px-2.5 py-1 text-[11px] font-medium bg-black/85 hover:bg-white text-white hover:text-black border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              Enlazar
+            </button>
+            <button type="button" onclick="removeCard('streaming', 0)" title="Eliminar bloque" class="w-7 h-7 flex items-center justify-center text-xs bg-black/85 hover:bg-red-600 text-zinc-300 hover:text-white border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              ×
+            </button>
+          </div>
+
+          <div class="media-frame">
+            
+          <div class="w-full h-full flex flex-col items-center justify-center text-center p-5 bg-zinc-950/90">
+            <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center mb-3 text-zinc-400">
+              <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </div>
+            <span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-zinc-300">
+              VIDEO / IMAGEN
+            </span>
+            <span class="edit-only text-[11px] text-zinc-500 mt-1.5">
+              + Pegar link de Vimeo, YouTube, Drive o imagen
+            </span>
+          </div>
+        
+          </div>
+        </div>
+      
+        <div class="group relative rounded-xl overflow-hidden bg-surface border border-borderline hover:border-zinc-700 transition">
+          <!-- Controles flotantes solo en modo edición -->
+          <div class="edit-only absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5">
+            <button type="button" onclick="openCardModal('streaming', 1)" class="px-2.5 py-1 text-[11px] font-medium bg-black/85 hover:bg-white text-white hover:text-black border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              Enlazar
+            </button>
+            <button type="button" onclick="removeCard('streaming', 1)" title="Eliminar bloque" class="w-7 h-7 flex items-center justify-center text-xs bg-black/85 hover:bg-red-600 text-zinc-300 hover:text-white border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              ×
+            </button>
+          </div>
+
+          <div class="media-frame">
+            
+          <div class="w-full h-full flex flex-col items-center justify-center text-center p-5 bg-zinc-950/90">
+            <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center mb-3 text-zinc-400">
+              <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </div>
+            <span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-zinc-300">
+              VIDEO / IMAGEN
+            </span>
+            <span class="edit-only text-[11px] text-zinc-500 mt-1.5">
+              + Pegar link de Vimeo, YouTube, Drive o imagen
+            </span>
+          </div>
+        
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- MODAL: ENLAZAR VIDEO O IMAGEN EN BLOQUE -->
+  <!-- FOOTER / CONTACTO -->
+  <footer id="contacto" class="py-20">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <div>
+        <p contenteditable="true" data-field="footerName" class="text-sm font-semibold tracking-[0.2em] uppercase text-white">ANDREÉ ARIAS</p>
+        <p contenteditable="true" data-field="footerSub" class="text-xs text-zinc-500 mt-1.5">Lima, Perú · Producción Audiovisual, Edición &amp; Estrategia Digital</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-5 text-xs tracking-wider uppercase text-zinc-400">
+        <a id="contact-email-link" href="mailto:contacto@andreearias.com" contenteditable="true" data-field="contactEmail" class="hover:text-white transition" target="_blank" rel="noopener noreferrer">contacto@andreearias.com</a>
+        <span class="text-zinc-700">•</span>
+        <span contenteditable="true" data-field="contactPhone" class="text-zinc-300">+51 999 999 999</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL PARA ENLAZAR VIDEO O IMAGEN CON REDIRECCIÓN -->
   <div id="card-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="w-full max-w-md rounded-2xl bg-zinc-900 border border-zinc-800 p-6 shadow-2xl space-y-5">
+    <div class="bg-zinc-950 border border-zinc-800 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
       <div class="flex items-center justify-between">
-        <h3 class="text-sm font-semibold text-white">Enlazar Video o Imagen</h3>
-        <button type="button" onclick="closeCardModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg cursor-pointer">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
+        <h3 class="text-sm font-semibold tracking-wider uppercase text-white">Configurar Multimedia</h3>
+        <button type="button" onclick="closeCardModal()" class="text-zinc-400 hover:text-white text-lg leading-none cursor-pointer">×</button>
       </div>
 
-      <!-- Selector de tipo de medio -->
-      <div class="grid grid-cols-2 gap-2 p-1 rounded-xl bg-zinc-950 border border-zinc-800/80">
-        <button type="button" id="type-btn-video" onclick="setCardMediaType('video')" class="py-2 rounded-lg text-xs font-semibold bg-zinc-800 text-white transition cursor-pointer">
+      <!-- Selector de pestaña -->
+      <div class="grid grid-cols-2 gap-2 p-1 bg-zinc-900 rounded-xl border border-zinc-800">
+        <button type="button" id="tab-video" onclick="switchModalTab('video')" class="py-2 text-xs font-medium rounded-lg bg-white text-black transition cursor-pointer">
           Video (Vimeo / YT / Drive)
         </button>
-        <button type="button" id="type-btn-image" onclick="setCardMediaType('image')" class="py-2 rounded-lg text-xs font-medium text-zinc-400 hover:text-white transition cursor-pointer">
-          Imagen (Drive / URL / PC)
+        <button type="button" id="tab-image" onclick="switchModalTab('image')" class="py-2 text-xs font-medium rounded-lg text-zinc-400 hover:text-white transition cursor-pointer">
+          Imagen + Link Destino
         </button>
       </div>
 
-      <div class="space-y-2">
-        <label for="card-url-input" id="card-url-label" class="block text-xs font-medium text-zinc-300">Enlace de Vimeo, YouTube, Drive o URL</label>
-        <input id="card-url-input" type="text" placeholder="https://vimeo.com/... o https://youtu.be/..." class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 focus:border-white focus:outline-none text-xs text-white placeholder-zinc-600" />
+      <!-- Panel Video -->
+      <div id="panel-video" class="space-y-3">
+        <label for="card-url-input" class="block text-xs text-zinc-400">Enlace de Vimeo, YouTube, Google Drive o archivo .mp4</label>
+        <input id="card-url-input" type="text" placeholder="https://vimeo.com/... o https://youtu.be/... o ./video.mp4" class="w-full px-3.5 py-2.5 text-sm bg-zinc-900 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-white">
+        <p class="text-[11px] text-zinc-500 leading-relaxed">
+          Soporta enlaces públicos u ocultos de Vimeo, videos/Shorts de YouTube, Google Drive o rutas directas como <code class="text-zinc-300">./clip1.mp4</code>.
+        </p>
       </div>
 
-      <div id="card-image-upload-wrapper" class="hidden space-y-3 pt-1">
-        <label class="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl border border-dashed border-zinc-700 hover:border-zinc-500 bg-zinc-950/60 hover:bg-zinc-950 text-xs text-zinc-300 cursor-pointer transition">
-          <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-          <span id="card-image-file-label">Subir imagen desde tu computadora</span>
-          <input id="card-image-file-input" type="file" accept="image/*" class="hidden" onchange="handleCardImageSelect(event)" />
-        </label>
-
-        <div class="space-y-1.5 pt-1">
-          <label for="card-link-url-input" class="block text-xs font-medium text-zinc-300">Enlace al hacer clic en la imagen (opcional)</label>
-          <input id="card-link-url-input" type="text" placeholder="https://drive.google.com/file/d/... o https://..." class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 focus:border-white focus:outline-none text-xs text-white placeholder-zinc-600" />
-          <p class="text-[11px] text-zinc-500">
-            Si agregas una URL aquí, al hacer clic sobre la imagen se abrirá esa página o video en una nueva pestaña.
+      <!-- Panel Imagen -->
+      <div id="panel-image" class="hidden space-y-3">
+        <div>
+          <label for="card-img-url-input" class="block text-xs text-zinc-400 mb-1.5">URL de imagen o subir archivo desde PC</label>
+          <input id="card-img-url-input" type="text" placeholder="https://... o selecciona una imagen abajo" class="w-full px-3.5 py-2.5 text-sm bg-zinc-900 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-white">
+        </div>
+        <div>
+          <input id="card-file-input" type="file" accept="image/*" onchange="handleImageUpload(event)" class="block w-full text-xs text-zinc-400 file:mr-3 file:py-2 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-zinc-800 file:text-zinc-200 hover:file:bg-zinc-700 cursor-pointer">
+        </div>
+        <div class="pt-1">
+          <label for="card-redirect-input" class="block text-xs text-zinc-400 mb-1.5">Enlace al hacer clic en la imagen (opcional)</label>
+          <input id="card-redirect-input" type="text" placeholder="https://drive.google.com/... o https://vimeo.com/..." class="w-full px-3.5 py-2.5 text-sm bg-zinc-900 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-white">
+          <p class="text-[11px] text-zinc-500 mt-1">
+            Si agregas un enlace aquí, al hacer clic sobre la imagen se abrirá esa página o video en una nueva pestaña.
           </p>
         </div>
       </div>
 
-      <p id="card-modal-error" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-900/60 rounded-xl p-3"></p>
-
-      <div class="flex items-center justify-between pt-2">
-        <button type="button" onclick="clearCardMedia()" class="text-xs text-red-400 hover:text-red-300 cursor-pointer">
-          Vaciar cuadro
-        </button>
-        <div class="flex items-center gap-2">
-          <button type="button" onclick="closeCardModal()" class="px-3.5 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-200 cursor-pointer">
-            Cancelar
-          </button>
-          <button type="button" onclick="applyCardMedia()" class="px-4 py-2 rounded-xl bg-white hover:bg-zinc-200 text-xs font-semibold text-black cursor-pointer">
-            Guardar Enlace
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: CONFIRMAR REINICIO -->
-  <div id="reset-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="w-full max-w-sm rounded-2xl bg-zinc-900 border border-zinc-800 p-6 shadow-2xl space-y-4">
-      <h3 class="text-sm font-semibold text-white">¿Restaurar valores iniciales?</h3>
-      <p class="text-xs text-zinc-400 leading-relaxed">
-        Se restablecerán los textos y los bloques vacíos por defecto. Tu archivo <code class="text-zinc-200">hero.mp4</code> en GitHub no se verá afectado.
-      </p>
-      <div class="flex justify-end gap-2 pt-2">
-        <button type="button" onclick="closeResetModal()" class="px-3.5 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-200 cursor-pointer">
+      <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-zinc-900">
+        <button type="button" onclick="closeCardModal()" class="px-4 py-2 text-xs font-medium text-zinc-400 hover:text-white transition cursor-pointer">
           Cancelar
         </button>
-        <button type="button" onclick="confirmReset()" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-semibold text-white cursor-pointer">
-          Sí, reiniciar
+        <button type="button" onclick="saveCardModal()" class="px-4 py-2 text-xs font-semibold bg-white hover:bg-zinc-200 text-black rounded-lg transition cursor-pointer">
+          Guardar Enlace
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Notificación Toast -->
-  <div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-700 text-xs font-medium text-zinc-100 shadow-2xl"></div>
+  <!-- MODAL PARA VIDEO DE PORTADA (HERO) -->
+  <div id="hero-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-zinc-950 border border-zinc-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm font-semibold tracking-wider uppercase text-white">Video de Portada (Hero)</h3>
+        <button type="button" onclick="closeHeroModal()" class="text-zinc-400 hover:text-white text-lg leading-none cursor-pointer">×</button>
+      </div>
+      <div class="space-y-2">
+        <label for="hero-url-input" class="block text-xs text-zinc-400">Ruta del video MP4 (por defecto: ./hero.mp4)</label>
+        <input id="hero-url-input" type="text" placeholder="./hero.mp4" class="w-full px-3.5 py-2.5 text-sm bg-zinc-900 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-white">
+        <p class="text-[11px] text-zinc-500">
+          Usa <code class="text-zinc-300">./hero.mp4</code> si el archivo está en tu repositorio de GitHub para reproducción automática en bucle sin sonido.
+        </p>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" onclick="closeHeroModal()" class="px-4 py-2 text-xs text-zinc-400 hover:text-white cursor-pointer">Cancelar</button>
+        <button type="button" onclick="saveHeroModal()" class="px-4 py-2 text-xs font-semibold bg-white text-black rounded-lg hover:bg-zinc-200 cursor-pointer">Aplicar</button>
+      </div>
+    </div>
+  </div>
 
-  <!-- Datos iniciales embebidos para exportación limpia -->
-  <script id="portfolio-initial-data" type="application/json">
-  {
-    "hero": {
-      "location": "PRODUCTOR AUDIOVISUAL · LIMA, PERÚ",
-      "name": "ANDRÉ ARIAS",
-      "bio": "BAJADA DESCRIPCIÓN PROFESIONAL — Dirección audiovisual, montaje y narrativa visual minimalista para marcas, cine documental y proyectos comerciales.",
-      "cta": "VER PROYECTOS",
-      "videoUrl": "./hero.mp4"
-    },
-    "sections": [
-      {
-        "id": "sec-1",
-        "title": "PROYECTOS DESTACADOS",
-        "items": [
-          { "id": "item-1", "url": "", "type": "video" },
-          { "id": "item-2", "url": "", "type": "video" },
-          { "id": "item-3", "url": "", "type": "video" },
-          { "id": "item-4", "url": "", "type": "video" }
-        ]
-      },
-      {
-        "id": "sec-2",
-        "title": "STREAMING & PODCAST",
-        "items": [
-          { "id": "item-5", "url": "", "type": "video" },
-          { "id": "item-6", "url": "", "type": "video" }
-        ]
-      }
-    ]
-  }
-  </script>
+  <!-- MODAL DE CONFIRMACIÓN PARA RESTAURAR (Sin alert/confirm nativo) -->
+  <div id="reset-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-zinc-950 border border-zinc-800 rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+      <h3 class="text-sm font-semibold tracking-wider uppercase text-white">¿Restaurar valores iniciales?</h3>
+      <p class="text-xs text-zinc-400 leading-relaxed">
+        Se restablecerán todos los textos y recuadros multimedia a sus valores por defecto.
+      </p>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" onclick="closeResetModal()" class="px-4 py-2 text-xs text-zinc-400 hover:text-white cursor-pointer">Cancelar</button>
+        <button type="button" onclick="confirmResetAllData()" class="px-4 py-2 text-xs font-semibold bg-red-600 text-white rounded-lg hover:bg-red-500 cursor-pointer">Sí, restaurar</button>
+      </div>
+    </div>
+  </div>
 
   <script>
-    // Bandera de arranque: en el archivo exportado público pasa a false (se reabre con ?editar=1 o Ctrl+E)
-    const DEFAULT_EDIT_MODE = true;
-    const STORAGE_KEY = 'portafolio_andre_v7_vimeo_full';
+    const STORAGE_KEY = 'andree_portfolio_state_v5';
 
-    let state = null;
-    let isEditMode = false;
-    let isPreviewing = false;
-    let activeCardTarget = { sectionId: null, itemId: null, mediaType: 'video' };
-    let pendingHeroDataUrl = null;
-    let pendingCardImageDataUrl = null;
+    const DEFAULT_STATE = {
+      heroVideo: './hero.mp4',
+      fields: {
+        brandName: 'ANDREÉ ARIAS',
+        heroTag: 'PRODUCTOR AUDIOVISUAL · EDITOR DE VIDEO · MOTION GRAPHICS',
+        heroTitle: 'Narrativa visual de alto impacto para marcas y medios digitales.',
+        heroSubtitle: 'Edición 4K, gráficos en movimiento 2D/3D, producción para streaming y contenido comercial diseñado para retener audiencia y potenciar resultados.',
+        sec1Title: 'PROYECTOS DESTACADOS',
+        verticalTitle: 'CLIPS VERTICALES · REELS & SHORTS',
+        sec2Title: 'STREAMING & PODCAST',
+        footerName: 'ANDREÉ ARIAS',
+        footerSub: 'Lima, Perú · Producción Audiovisual, Edición & Estrategia Digital',
+        contactEmail: 'contacto@andreearias.com',
+        contactPhone: '+51 999 999 999'
+      },
+      featured: [
+        { type: 'video', url: '', redirectUrl: '' },
+        { type: 'video', url: '', redirectUrl: '' },
+        { type: 'video', url: '', redirectUrl: '' },
+        { type: 'video', url: '', redirectUrl: '' }
+      ],
+      vertical: [
+        { type: 'video', url: '', redirectUrl: '' },
+        { type: 'video', url: '', redirectUrl: '' },
+        { type: 'video', url: '', redirectUrl: '' },
+        { type: 'video', url: '', redirectUrl: '' },
+        { type: 'video', url: '', redirectUrl: '' }
+      ],
+      streaming: [
+        { type: 'video', url: '', redirectUrl: '' },
+        { type: 'video', url: '', redirectUrl: '' }
+      ]
+    };
 
-    // Extrae ID y hash opcional (para videos ocultos/privados) desde cualquier formato de URL de Vimeo
-    function extractVimeoData(url) {
-      if (!url) return null;
-      const clean = url.trim();
+    let state = loadState();
+    let currentEditTarget = { section: null, index: null };
+    let activeModalTab = 'video';
 
-      // 1. player.vimeo.com/video/123456789?h=abcdef1234
-      const playerMatch = clean.match(/player\.vimeo\.com\/video\/(\d+)(?:\/([a-zA-Z0-9]+))?/i);
-      if (playerMatch) {
-        const queryHash = clean.match(/[?&]h=([a-zA-Z0-9]+)/i);
-        return {
-          id: playerMatch[1],
-          hash: playerMatch[2] || (queryHash ? queryHash[1] : null)
-        };
-      }
-
-      // 2. vimeo.com/channels/.../123456789, groups, album o showcase
-      const channelMatch = clean.match(/vimeo\.com\/(?:channels\/[^/]+|groups\/[^/]+\/videos|album\/\d+\/video|showcase\/\d+\/video)\/(\d+)(?:\/([a-zA-Z0-9]+))?/i);
-      if (channelMatch) {
-        const queryHash = clean.match(/[?&]h=([a-zA-Z0-9]+)/i);
-        return {
-          id: channelMatch[1],
-          hash: channelMatch[2] || (queryHash ? queryHash[1] : null)
-        };
-      }
-
-      // 3. Enlace estándar u oculto con hash: vimeo.com/123456789 o vimeo.com/123456789/abcdef1234
-      const standardMatch = clean.match(/vimeo\.com\/(\d+)(?:\/([a-zA-Z0-9]+))?/i);
-      if (standardMatch) {
-        const queryHash = clean.match(/[?&]h=([a-zA-Z0-9]+)/i);
-        return {
-          id: standardMatch[1],
-          hash: standardMatch[2] || (queryHash ? queryHash[1] : null)
-        };
-      }
-
-      return null;
-    }
-
-    // Extrae el ID de video desde enlaces estándar, cortos, embed o Shorts de YouTube
-    function extractYouTubeId(url) {
-      if (!url) return null;
-      const clean = url.trim();
-      const patterns = [
-        /(?:youtube\.com\/watch\?v=|youtube\.com\/watch\?.+&v=)([a-zA-Z0-9_-]{11})/,
-        /youtu\.be\/([a-zA-Z0-9_-]{11})/,
-        /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
-        /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/
-      ];
-      for (const regex of patterns) {
-        const match = clean.match(regex);
-        if (match && match[1]) return match[1];
-      }
-      return null;
-    }
-
-    // Extrae el ID de archivo desde cualquier enlace estándar de Google Drive
-    function extractDriveId(url) {
-      if (!url) return null;
-      const clean = url.trim();
-      const patterns = [
-        /\/file\/d\/([a-zA-Z0-9_-]+)/,
-        /[?&]id=([a-zA-Z0-9_-]+)/,
-        /\/d\/([a-zA-Z0-9_-]+)/
-      ];
-      for (const regex of patterns) {
-        const match = clean.match(regex);
-        if (match && match[1]) return match[1];
-      }
-      return null;
-    }
-
-    // Genera el HTML exacto del reproductor según plataforma y tipo de medio
-    function buildMediaHTML(url, type = 'video', isHero = false) {
-      if (!url || !url.trim()) return '';
-      const cleanUrl = url.trim();
-
-      // 1. Soporte Vimeo (público y privado/oculto con parámetro h=)
-      const vimeoData = extractVimeoData(cleanUrl);
-      if (vimeoData) {
-        const hashParam = vimeoData.hash ? `h=${vimeoData.hash}&` : '';
-        const embedUrl = isHero
-          ? `https://player.vimeo.com/video/${vimeoData.id}?${hashParam}background=1&autoplay=1&loop=1&muted=1&autopause=0`
-          : `https://player.vimeo.com/video/${vimeoData.id}?${hashParam}title=0&byline=0&portrait=0&badge=0&autopause=0`;
-        return `<iframe class="vimeo-frame" src="${embedUrl}" title="Reproductor de Vimeo" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
-      }
-
-      // 2. Soporte YouTube (100% exacto sin recorte)
-      const ytId = extractYouTubeId(cleanUrl);
-      if (ytId) {
-        const embedUrl = isHero
-          ? `https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&loop=1&playlist=${ytId}&controls=0&rel=0&modestbranding=1`
-          : `https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1`;
-        return `<iframe class="yt-frame" src="${embedUrl}" title="Reproductor de YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>`;
-      }
-
-      // 3. Soporte Google Drive (con compensación vertical para ocultar barra negra superior)
-      const driveId = extractDriveId(cleanUrl);
-      if (driveId) {
-        if (type === 'image') {
-          const thumbUrl = `https://drive.google.com/thumbnail?id=${driveId}&sz=w1600`;
-          return `<img src="${thumbUrl}" alt="Proyecto audiovisual" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/1280x720/121216/71717a?text=Verifica+permisos+en+Drive';" />`;
-        }
-        const previewUrl = `https://drive.google.com/file/d/${driveId}/preview`;
-        return `<iframe class="drive-frame" src="${previewUrl}" title="Reproductor de Google Drive" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>`;
-      }
-
-      // 4. Video directo (.mp4, .webm, .ogg o data URL)
-      const isDirectVideo = isHero || (type === 'video' && (
-        /\.(mp4|webm|ogg)(\?.*)?$/i.test(cleanUrl) ||
-        cleanUrl.startsWith('./') ||
-        cleanUrl.startsWith('data:video/')
-      ));
-
-      if (isDirectVideo) {
-        if (isHero) {
-          return `<video src="${cleanUrl}" autoplay loop muted playsinline preload="auto" class="w-full h-full object-cover"></video>`;
-        }
-        return `<video src="${cleanUrl}" controls playsinline preload="metadata"></video>`;
-      }
-
-      // 5. Imagen directa o base64 local
-      return `<img src="${cleanUrl}" alt="Proyecto audiovisual" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/1280x720/121216/71717a?text=Imagen+no+disponible';" />`;
-    }
-
-    // Carga el estado inicial desde el bloque JSON embebido o desde localStorage en modo edición
     function loadState() {
-      const embeddedScript = document.getElementById('portfolio-initial-data');
-      const baseData = JSON.parse(embeddedScript.textContent);
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const forcedEdit = urlParams.get('editar') === '1';
-      const isExported = document.documentElement.getAttribute('data-exported') === 'true';
-
-      if (forcedEdit) {
-        isEditMode = true;
-      } else if (isExported) {
-        isEditMode = false;
-      } else {
-        isEditMode = DEFAULT_EDIT_MODE;
-      }
-
-      if (isEditMode) {
+      const embeddedScript = document.getElementById('embedded-portfolio-data');
+      if (embeddedScript && embeddedScript.textContent.trim()) {
         try {
-          const saved = localStorage.getItem(STORAGE_KEY);
-          if (saved) {
-            state = JSON.parse(saved);
-            return;
-          }
-        } catch (e) {
-          console.warn('No se pudo leer localStorage:', e);
-        }
+          const parsed = JSON.parse(embeddedScript.textContent);
+          return mergeWithDefaults(parsed);
+        } catch (e) {}
       }
-      state = baseData;
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          return mergeWithDefaults(JSON.parse(saved));
+        }
+      } catch (e) {}
+      return JSON.parse(JSON.stringify(DEFAULT_STATE));
     }
 
-    function saveState(notify = false) {
-      if (!isEditMode) return;
+    function mergeWithDefaults(parsed) {
+      return {
+        heroVideo: parsed.heroVideo || DEFAULT_STATE.heroVideo,
+        fields: { ...DEFAULT_STATE.fields, ...(parsed.fields || {}) },
+        featured: Array.isArray(parsed.featured) ? parsed.featured : DEFAULT_STATE.featured,
+        vertical: Array.isArray(parsed.vertical) ? parsed.vertical : DEFAULT_STATE.vertical,
+        streaming: Array.isArray(parsed.streaming) ? parsed.streaming : DEFAULT_STATE.streaming
+      };
+    }
+
+    function saveState() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        if (notify) showToast('Cambios guardados en el navegador');
       } catch (e) {
-        console.warn('No se pudo guardar en localStorage:', e);
-        if (notify) showToast('No se pudo guardar (archivo muy pesado)');
+        console.warn('No se pudo guardar en localStorage.');
       }
     }
 
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.classList.remove('hidden');
-      clearTimeout(toast._timer);
-      toast._timer = setTimeout(() => {
-        toast.classList.add('hidden');
-      }, 2800);
+    // Parseador universal de medios: Vimeo, YouTube, Google Drive, MP4, Imagen
+    function parseMedia(item) {
+      const url = (item && item.url ? item.url : '').trim();
+      const redirectUrl = (item && item.redirectUrl ? item.redirectUrl : '').trim();
+      if (!url) return null;
+
+      const isImageExt = /\.(jpg|jpeg|png|webp|gif|avif|svg)(\?.*)?$/i.test(url) || url.startsWith('data:image/');
+      if (item.type === 'image' || isImageExt) {
+        let imgSrc = url;
+        const driveImgMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (driveImgMatch && !url.startsWith('data:')) {
+          imgSrc = `https://lh3.googleusercontent.com/d/${driveImgMatch[1]}`;
+        }
+        return { kind: 'image', src: imgSrc, redirectUrl };
+      }
+
+      // 1. Vimeo (público y privado/oculto con hash)
+      const vimeoMatch = url.match(/(?:player\.)?vimeo\.com\/(?:video\/|channels\/[^\/]+\/|groups\/[^\/]+\/videos\/)?(\d+)(?:\/([a-zA-Z0-9]+))?/);
+      if (vimeoMatch) {
+        const videoId = vimeoMatch[1];
+        const urlObj = (() => { try { return new URL(url); } catch { return null; } })();
+        const hashParam = vimeoMatch[2] || (urlObj ? urlObj.searchParams.get('h') : '');
+        const hashQuery = hashParam ? `h=${hashParam}&` : '';
+        return {
+          kind: 'iframe',
+          provider: 'vimeo',
+          src: `https://player.vimeo.com/video/${videoId}?${hashQuery}title=0&byline=0&portrait=0&badge=0&autopause=0`
+        };
+      }
+
+      // 2. YouTube (watch?v=, youtu.be/, shorts/, embed/)
+      const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      if (ytMatch) {
+        return {
+          kind: 'iframe',
+          provider: 'youtube',
+          src: `https://www.youtube.com/embed/${ytMatch[1]}?rel=0&modestbranding=1`
+        };
+      }
+
+      // 3. Google Drive
+      const driveMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/);
+      if (driveMatch) {
+        return {
+          kind: 'iframe',
+          provider: 'drive',
+          src: `https://drive.google.com/file/d/${driveMatch[1]}/preview`
+        };
+      }
+
+      // 4. Video directo (.mp4, .webm, .ogg o ruta relativa ./archivo.mp4)
+      return {
+        kind: 'video',
+        src: url
+      };
     }
 
-    function escapeHtml(str) {
-      return String(str || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+    function renderMediaContent(item, isVertical = false) {
+      const parsed = parseMedia(item);
+      if (!parsed) {
+        return `
+          <div class="w-full h-full flex flex-col items-center justify-center text-center p-5 bg-zinc-950/90">
+            <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center mb-3 text-zinc-400">
+              <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-zinc-300">
+              ${isVertical ? 'CLIP 9:16' : 'VIDEO / IMAGEN'}
+            </span>
+            <span class="edit-only text-[11px] text-zinc-500 mt-1.5">
+              + Pegar link de Vimeo, YouTube, Drive o imagen
+            </span>
+          </div>
+        `;
+      }
+
+      if (parsed.kind === 'image') {
+        const imgTag = `<img src="${parsed.src}" alt="Proyecto audiovisual" class="object-cover w-full h-full transition duration-500 group-hover:scale-[1.02]" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/1280x720/121216/71717a?text=Imagen+no+disponible';" />`;
+        if (parsed.redirectUrl) {
+          const safeHref = /^https?:\/\//i.test(parsed.redirectUrl) ? parsed.redirectUrl : 'https://' + parsed.redirectUrl;
+          return `
+            <a href="${safeHref}" target="_blank" rel="noopener noreferrer" class="block w-full h-full relative cursor-pointer" title="Abrir proyecto">
+              ${imgTag}
+              <span class="absolute bottom-3 right-3 z-10 px-2.5 py-1 text-[10px] font-medium tracking-wider uppercase bg-black/75 text-white border border-white/15 rounded-md backdrop-blur-sm opacity-90 group-hover:opacity-100 transition">
+                Ver proyecto ↗
+              </span>
+            </a>
+          `;
+        }
+        return imgTag;
+      }
+
+      if (parsed.kind === 'video') {
+        return `<video src="${parsed.src}" controls playsinline preload="metadata" class="w-full h-full object-cover"></video>`;
+      }
+
+      const embedClass = parsed.provider === 'drive' ? 'drive-embed' : 'std-embed';
+      return `<iframe src="${parsed.src}" class="${embedClass}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
     }
 
-    // Renderiza toda la interfaz
+    function createCardHTML(item, section, index, isVertical = false) {
+      const hasUrl = item && item.url && item.url.trim() !== '';
+      const isEditing = document.body.classList.contains('editing-active');
+      if (!isEditing && !hasUrl) return '';
+
+      const wrapperClasses = isVertical
+        ? 'group relative flex-none w-[220px] sm:w-[250px] rounded-xl overflow-hidden bg-surface border border-borderline hover:border-zinc-700 transition'
+        : 'group relative rounded-xl overflow-hidden bg-surface border border-borderline hover:border-zinc-700 transition';
+      const frameClass = isVertical ? 'media-frame-vertical' : 'media-frame';
+
+      return `
+        <div class="${wrapperClasses}">
+          <!-- Controles flotantes solo en modo edición -->
+          <div class="edit-only absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5">
+            <button type="button" onclick="openCardModal('${section}', ${index})" class="px-2.5 py-1 text-[11px] font-medium bg-black/85 hover:bg-white text-white hover:text-black border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              ${hasUrl ? 'Cambiar enlace' : 'Enlazar'}
+            </button>
+            <button type="button" onclick="removeCard('${section}', ${index})" title="Eliminar bloque" class="w-7 h-7 flex items-center justify-center text-xs bg-black/85 hover:bg-red-600 text-zinc-300 hover:text-white border border-zinc-700 rounded-lg backdrop-blur-md transition shadow cursor-pointer">
+              &times;
+            </button>
+          </div>
+
+          <div class="${frameClass}">
+            ${renderMediaContent(item, isVertical)}
+          </div>
+        </div>
+      `;
+    }
+
     function renderAll() {
-      const activeEditing = isEditMode && !isPreviewing;
-
-      document.body.classList.toggle('editing-active', activeEditing);
-      const toolbar = document.getElementById('editor-toolbar');
-      const fab = document.getElementById('exit-preview-fab');
-
-      if (!isEditMode) {
-        toolbar.classList.add('hidden');
-        fab.classList.add('hidden');
-      } else if (isPreviewing) {
-        toolbar.classList.add('hidden');
-        fab.classList.remove('hidden');
-      } else {
-        toolbar.classList.remove('hidden');
-        fab.classList.add('hidden');
-      }
-
-      document.querySelectorAll('.edit-only').forEach(el => {
-        el.classList.toggle('hidden', !activeEditing);
-      });
-
-      // Portada
-      const locEl = document.getElementById('hero-location');
-      const nameEl = document.getElementById('hero-name');
-      const bioEl = document.getElementById('hero-bio');
-      const ctaEl = document.getElementById('hero-cta');
-
-      locEl.textContent = state.hero.location;
-      nameEl.textContent = state.hero.name;
-      bioEl.textContent = state.hero.bio;
-      ctaEl.textContent = state.hero.cta;
-
-      [locEl, nameEl, bioEl, ctaEl].forEach(el => {
-        if (activeEditing) {
-          el.setAttribute('contenteditable', 'true');
-        } else {
-          el.removeAttribute('contenteditable');
+      document.querySelectorAll('[data-field]').forEach(el => {
+        const key = el.getAttribute('data-field');
+        if (state.fields[key] !== undefined) {
+          el.textContent = state.fields[key];
         }
       });
 
-      // Video de portada
-      const heroContainer = document.getElementById('hero-media-container');
-      heroContainer.innerHTML = buildMediaHTML(state.hero.videoUrl, 'video', true);
+      const emailLink = document.getElementById('contact-email-link');
+      if (emailLink && state.fields.contactEmail) {
+        emailLink.href = `mailto:${state.fields.contactEmail.trim()}`;
+      }
 
-      // Secciones y cuadrículas (2 columnas amplias en escritorio, sin descripción)
-      const sectionsContainer = document.getElementById('sections-container');
-      sectionsContainer.innerHTML = '';
+      const heroVid = document.getElementById('hero-video');
+      if (heroVid && state.heroVideo) {
+        if (heroVid.getAttribute('src') !== state.heroVideo) {
+          heroVid.setAttribute('src', state.heroVideo);
+        }
+      }
 
-      state.sections.forEach(section => {
-        const secEl = document.createElement('section');
-        secEl.className = 'space-y-7';
+      const gridFeatured = document.getElementById('grid-featured');
+      if (gridFeatured) {
+        gridFeatured.innerHTML = state.featured
+          .map((item, idx) => createCardHTML(item, 'featured', idx, false))
+          .join('');
+      }
 
-        const headerHTML = `
-          <div class="flex items-center justify-between gap-4 border-b border-zinc-900 pb-4">
-            <h2
-              data-section-id="${section.id}"
-              ${activeEditing ? 'contenteditable="true"' : ''}
-              class="section-title-editable text-base sm:text-lg font-semibold tracking-[0.16em] uppercase text-white"
-            >${escapeHtml(section.title)}</h2>
-            ${activeEditing ? `
-              <button type="button" onclick="addCard('${section.id}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-medium text-zinc-300 hover:text-white transition cursor-pointer">
-                <span>+ Añadir bloque</span>
-              </button>
-            ` : ''}
-          </div>
-        `;
+      const carouselVertical = document.getElementById('carousel-vertical');
+      if (carouselVertical) {
+        carouselVertical.innerHTML = state.vertical
+          .map((item, idx) => createCardHTML(item, 'vertical', idx, true))
+          .join('');
+      }
 
-        const cardsHTML = section.items.map(item => {
-          const hasMedia = Boolean(item.url && item.url.trim());
-          const rawMediaHTML = hasMedia
-            ? buildMediaHTML(item.url, item.type || 'video', false)
-            : `
-              <button type="button" onclick="openCardModal('${section.id}', '${item.id}')" class="absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-2.5 p-4 text-center hover:bg-zinc-900/70 transition cursor-pointer">
-                <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-300 group-hover:scale-105 group-hover:border-white group-hover:text-white transition">
-                  <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-                <span class="text-[11px] font-semibold tracking-[0.16em] uppercase text-zinc-200">VIDEO / IMAGEN</span>
-                <span class="text-[11px] text-zinc-500">+ Pegar link de Vimeo, YouTube, Drive o imagen</span>
-              </button>
-            `;
-
-          const hasTargetLink = hasMedia && (item.type === 'image') && Boolean(item.linkUrl && item.linkUrl.trim());
-          const safeTargetLink = hasTargetLink
-            ? escapeHtml(/^https?:\/\//i.test(item.linkUrl.trim()) ? item.linkUrl.trim() : 'https://' + item.linkUrl.trim())
-            : '';
-
-          const mediaContent = hasTargetLink
-            ? `<a href="${safeTargetLink}" target="_blank" rel="noopener noreferrer" title="Abrir enlace del proyecto" class="block absolute inset-0 w-full h-full cursor-pointer group/img">
-                ${rawMediaHTML}
-                <span class="pointer-events-none absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-950/80 border border-zinc-700/80 text-[10px] font-medium tracking-wider uppercase text-zinc-200 opacity-0 group-hover/img:opacity-100 transition-opacity backdrop-blur-md">
-                  <span>Ver proyecto</span>
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                </span>
-              </a>`
-            : rawMediaHTML;
-
-          const editOverlay = activeEditing ? `
-            <div class="absolute top-3 right-3 z-20 flex items-center gap-1.5 opacity-95">
-              <button type="button" onclick="openCardModal('${section.id}', '${item.id}')" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-zinc-950/85 hover:bg-zinc-900 border border-zinc-700/80 text-[11px] font-medium text-zinc-200 backdrop-blur-md shadow-md transition cursor-pointer">
-                <svg class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-                <span>${hasMedia ? 'Cambiar enlace' : 'Enlazar'}</span>
-              </button>
-              <button type="button" onclick="deleteCard('${section.id}', '${item.id}')" title="Eliminar bloque" class="p-1.5 rounded-lg bg-zinc-950/85 hover:bg-red-950/80 border border-zinc-700/80 hover:border-red-800 text-zinc-400 hover:text-red-300 backdrop-blur-md shadow-md transition cursor-pointer">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-              </button>
-            </div>
-          ` : '';
-
-          // En modo público ocultamos cuadros vacíos sin enlace
-          if (!activeEditing && !hasMedia) {
-            return '';
-          }
-
-          return `
-            <article class="group relative rounded-2xl bg-surface border border-borderline overflow-hidden shadow-lg transition hover:border-zinc-700/80">
-              ${editOverlay}
-              <div class="media-frame">
-                ${mediaContent}
-              </div>
-            </article>
-          `;
-        }).join('');
-
-        secEl.innerHTML = `
-          ${headerHTML}
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-            ${cardsHTML}
-          </div>
-        `;
-        sectionsContainer.appendChild(secEl);
-      });
-
-      bindEditableListeners();
+      const gridStreaming = document.getElementById('grid-streaming');
+      if (gridStreaming) {
+        gridStreaming.innerHTML = state.streaming
+          .map((item, idx) => createCardHTML(item, 'streaming', idx, false))
+          .join('');
+      }
     }
 
-    function bindEditableListeners() {
-      if (!isEditMode || isPreviewing) return;
-
-      document.querySelectorAll('[data-field]').forEach(el => {
-        el.oninput = () => {
-          const key = el.getAttribute('data-field');
-          state.hero[key] = el.textContent.trim();
-          saveState(false);
-        };
-      });
-
-      document.querySelectorAll('.section-title-editable').forEach(el => {
-        el.oninput = () => {
-          const secId = el.getAttribute('data-section-id');
-          const sec = state.sections.find(s => s.id === secId);
-          if (sec) {
-            sec.title = el.textContent.trim();
-            saveState(false);
-          }
-        };
-      });
+    // Navegación del carrusel vertical
+    function scrollVerticalCarousel(direction) {
+      const track = document.getElementById('carousel-vertical');
+      if (!track) return;
+      const step = 520;
+      track.scrollBy({ left: direction * step, behavior: 'smooth' });
     }
 
-    function togglePreviewMode() {
-      isPreviewing = !isPreviewing;
+    // Añadir y eliminar tarjetas
+    function addCard(section) {
+      state[section].push({ type: 'video', url: '', redirectUrl: '' });
+      saveState();
       renderAll();
     }
 
-    function addCard(sectionId) {
-      const sec = state.sections.find(s => s.id === sectionId);
-      if (!sec) return;
-      sec.items.push({
-        id: 'item-' + Date.now(),
-        url: '',
-        type: 'video'
-      });
-      saveState(false);
+    function addVerticalCard() {
+      state.vertical.push({ type: 'video', url: '', redirectUrl: '' });
+      saveState();
+      renderAll();
+      setTimeout(() => {
+        const track = document.getElementById('carousel-vertical');
+        if (track) track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
+      }, 50);
+    }
+
+    function removeCard(section, index) {
+      state[section].splice(index, 1);
+      saveState();
       renderAll();
     }
 
-    function deleteCard(sectionId, itemId) {
-      const sec = state.sections.find(s => s.id === sectionId);
-      if (!sec) return;
-      sec.items = sec.items.filter(item => item.id !== itemId);
-      saveState(false);
-      renderAll();
+    // Modal de tarjetas
+    function openCardModal(section, index) {
+      currentEditTarget = { section, index };
+      const item = state[section][index] || { type: 'video', url: '', redirectUrl: '' };
+
+      const videoInput = document.getElementById('card-url-input');
+      const imgUrlInput = document.getElementById('card-img-url-input');
+      const redirectInput = document.getElementById('card-redirect-input');
+      const fileInput = document.getElementById('card-file-input');
+
+      if (fileInput) fileInput.value = '';
+
+      if (item.type === 'image') {
+        switchModalTab('image');
+        if (imgUrlInput) imgUrlInput.value = item.url || '';
+        if (videoInput) videoInput.value = '';
+      } else {
+        switchModalTab('video');
+        if (videoInput) videoInput.value = item.url || '';
+        if (imgUrlInput) imgUrlInput.value = '';
+      }
+      if (redirectInput) redirectInput.value = item.redirectUrl || '';
+
+      document.getElementById('card-modal').classList.remove('hidden');
     }
 
-    // Modal de Video de Portada
+    function closeCardModal() {
+      document.getElementById('card-modal').classList.add('hidden');
+      currentEditTarget = { section: null, index: null };
+    }
+
+    function switchModalTab(tab) {
+      activeModalTab = tab;
+      const tabVideo = document.getElementById('tab-video');
+      const tabImage = document.getElementById('tab-image');
+      const panelVideo = document.getElementById('panel-video');
+      const panelImage = document.getElementById('panel-image');
+
+      if (tab === 'video') {
+        tabVideo.className = 'py-2 text-xs font-medium rounded-lg bg-white text-black transition cursor-pointer';
+        tabImage.className = 'py-2 text-xs font-medium rounded-lg text-zinc-400 hover:text-white transition cursor-pointer';
+        panelVideo.classList.remove('hidden');
+        panelImage.classList.add('hidden');
+      } else {
+        tabImage.className = 'py-2 text-xs font-medium rounded-lg bg-white text-black transition cursor-pointer';
+        tabVideo.className = 'py-2 text-xs font-medium rounded-lg text-zinc-400 hover:text-white transition cursor-pointer';
+        panelImage.classList.remove('hidden');
+        panelVideo.classList.add('hidden');
+      }
+    }
+
+    function handleImageUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const imgInput = document.getElementById('card-img-url-input');
+        if (imgInput) imgInput.value = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveCardModal() {
+      const { section, index } = currentEditTarget;
+      if (!section || index === null) return;
+
+      if (activeModalTab === 'video') {
+        const url = document.getElementById('card-url-input').value.trim();
+        state[section][index] = { type: 'video', url, redirectUrl: '' };
+      } else {
+        const url = document.getElementById('card-img-url-input').value.trim();
+        const redirectUrl = document.getElementById('card-redirect-input').value.trim();
+        state[section][index] = { type: 'image', url, redirectUrl };
+      }
+
+      saveState();
+      renderAll();
+      closeCardModal();
+    }
+
+    // Modal Hero Video
     function openHeroModal() {
-      pendingHeroDataUrl = null;
-      const input = document.getElementById('hero-url-input');
-      const errEl = document.getElementById('hero-modal-error');
-      const fileLabel = document.getElementById('hero-file-label');
-
-      input.value = state.hero.videoUrl && !state.hero.videoUrl.startsWith('data:') ? state.hero.videoUrl : '';
-      errEl.classList.add('hidden');
-      fileLabel.textContent = 'Seleccionar archivo MP4 o WebM (máx. 4 MB)';
+      document.getElementById('hero-url-input').value = state.heroVideo || './hero.mp4';
       document.getElementById('hero-modal').classList.remove('hidden');
     }
 
@@ -764,158 +1022,25 @@
       document.getElementById('hero-modal').classList.add('hidden');
     }
 
-    function handleHeroFileSelect(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const errEl = document.getElementById('hero-modal-error');
-      errEl.classList.add('hidden');
-
-      if (file.size > 4.5 * 1024 * 1024) {
-        errEl.textContent = 'El archivo supera los 4.5 MB. Súbelo a tu repositorio de GitHub como hero.mp4 y escribe ./hero.mp4 arriba.';
-        errEl.classList.remove('hidden');
-        event.target.value = '';
-        return;
-      }
-
-      document.getElementById('hero-file-label').textContent = file.name;
-      const reader = new FileReader();
-      reader.onload = e => {
-        pendingHeroDataUrl = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function applyHeroVideo() {
-      const rawUrl = document.getElementById('hero-url-input').value.trim();
-      const errEl = document.getElementById('hero-modal-error');
-      errEl.classList.add('hidden');
-
-      const finalUrl = pendingHeroDataUrl || rawUrl;
-      if (!finalUrl) {
-        errEl.textContent = 'Escribe ./hero.mp4, pega un enlace de video o selecciona un archivo.';
-        errEl.classList.remove('hidden');
-        return;
-      }
-
-      state.hero.videoUrl = finalUrl;
-      saveState(true);
+    function saveHeroModal() {
+      const val = document.getElementById('hero-url-input').value.trim();
+      state.heroVideo = val || './hero.mp4';
+      saveState();
+      renderAll();
       closeHeroModal();
-      renderAll();
     }
 
-    function resetHeroVideo() {
-      state.hero.videoUrl = './hero.mp4';
-      pendingHeroDataUrl = null;
-      saveState(true);
-      closeHeroModal();
-      renderAll();
-    }
-
-    // Modal de Tarjeta Multimedia
-    function openCardModal(sectionId, itemId) {
-      const sec = state.sections.find(s => s.id === sectionId);
-      if (!sec) return;
-      const item = sec.items.find(i => i.id === itemId);
-      if (!item) return;
-
-      pendingCardImageDataUrl = null;
-      activeCardTarget = {
-        sectionId,
-        itemId,
-        mediaType: item.type || 'video'
-      };
-
-      const input = document.getElementById('card-url-input');
-      const linkInput = document.getElementById('card-link-url-input');
-      const errEl = document.getElementById('card-modal-error');
-      input.value = item.url && !item.url.startsWith('data:') ? item.url : '';
-      if (linkInput) linkInput.value = item.linkUrl || '';
-      errEl.classList.add('hidden');
-      document.getElementById('card-image-file-label').textContent = 'Subir imagen desde tu computadora';
-
-      setCardMediaType(activeCardTarget.mediaType);
-      document.getElementById('card-modal').classList.remove('hidden');
-    }
-
-    function closeCardModal() {
-      document.getElementById('card-modal').classList.add('hidden');
-    }
-
-    function setCardMediaType(type) {
-      activeCardTarget.mediaType = type;
-      const btnVideo = document.getElementById('type-btn-video');
-      const btnImage = document.getElementById('type-btn-image');
-      const urlLabel = document.getElementById('card-url-label');
-      const urlInput = document.getElementById('card-url-input');
-      const uploadWrapper = document.getElementById('card-image-upload-wrapper');
-
-      if (type === 'video') {
-        btnVideo.className = 'py-2 rounded-lg text-xs font-semibold bg-zinc-800 text-white transition cursor-pointer';
-        btnImage.className = 'py-2 rounded-lg text-xs font-medium text-zinc-400 hover:text-white transition cursor-pointer';
-        if (urlLabel) urlLabel.textContent = 'Enlace de Vimeo, YouTube, Drive o URL .mp4';
-        if (urlInput) urlInput.placeholder = 'https://vimeo.com/... o https://youtu.be/...';
-        uploadWrapper.classList.add('hidden');
-      } else {
-        btnImage.className = 'py-2 rounded-lg text-xs font-semibold bg-zinc-800 text-white transition cursor-pointer';
-        btnVideo.className = 'py-2 rounded-lg text-xs font-medium text-zinc-400 hover:text-white transition cursor-pointer';
-        if (urlLabel) urlLabel.textContent = 'URL de imagen (o sube un archivo abajo)';
-        if (urlInput) urlInput.placeholder = 'https://... (opcional si subes desde PC)';
-        uploadWrapper.classList.remove('hidden');
+    // Escuchar edición de textos en vivo
+    document.addEventListener('input', (e) => {
+      const target = e.target;
+      if (target && target.hasAttribute('data-field')) {
+        const key = target.getAttribute('data-field');
+        state.fields[key] = target.textContent;
+        saveState();
       }
-    }
+    });
 
-    function handleCardImageSelect(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      document.getElementById('card-image-file-label').textContent = file.name;
-      const reader = new FileReader();
-      reader.onload = e => {
-        pendingCardImageDataUrl = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function applyCardMedia() {
-      const rawUrl = document.getElementById('card-url-input').value.trim();
-      const rawLinkUrl = (document.getElementById('card-link-url-input')?.value || '').trim();
-      const errEl = document.getElementById('card-modal-error');
-      errEl.classList.add('hidden');
-
-      const finalUrl = pendingCardImageDataUrl || rawUrl;
-      if (!finalUrl) {
-        errEl.textContent = 'Pega un enlace válido de Vimeo, YouTube, Google Drive, URL directa o sube una imagen.';
-        errEl.classList.remove('hidden');
-        return;
-      }
-
-      const sec = state.sections.find(s => s.id === activeCardTarget.sectionId);
-      const item = sec && sec.items.find(i => i.id === activeCardTarget.itemId);
-      if (item) {
-        const finalType = pendingCardImageDataUrl ? 'image' : activeCardTarget.mediaType;
-        item.url = finalUrl;
-        item.type = finalType;
-        item.linkUrl = finalType === 'image' ? rawLinkUrl : '';
-      }
-
-      saveState(true);
-      closeCardModal();
-      renderAll();
-    }
-
-    function clearCardMedia() {
-      const sec = state.sections.find(s => s.id === activeCardTarget.sectionId);
-      const item = sec && sec.items.find(i => i.id === activeCardTarget.itemId);
-      if (item) {
-        item.url = '';
-        item.type = 'video';
-        item.linkUrl = '';
-      }
-      saveState(true);
-      closeCardModal();
-      renderAll();
-    }
-
-    // Modal de Reinicio
+    // Modal de restauración
     function openResetModal() {
       document.getElementById('reset-modal').classList.remove('hidden');
     }
@@ -924,76 +1049,95 @@
       document.getElementById('reset-modal').classList.add('hidden');
     }
 
-    function confirmReset() {
+    function confirmResetAllData() {
       localStorage.removeItem(STORAGE_KEY);
-      const embeddedScript = document.getElementById('portfolio-initial-data');
-      state = JSON.parse(embeddedScript.textContent);
-      closeResetModal();
+      state = JSON.parse(JSON.stringify(DEFAULT_STATE));
       renderAll();
-      showToast('Valores restaurados');
+      closeResetModal();
     }
 
-    // Exportar HTML público autocontenido sin modo edición por defecto
+    // Exportar archivo index.html limpio listo para GitHub Pages
     function exportCleanHTML() {
-      const docClone = document.documentElement.cloneNode(true);
-      docClone.setAttribute('data-exported', 'true');
+      const clone = document.documentElement.cloneNode(true);
+      const cloneBody = clone.querySelector('body');
+      cloneBody.classList.remove('editing-active');
+      cloneBody.setAttribute('data-exported', 'true');
 
-      const bodyClone = docClone.querySelector('body');
-      bodyClone.classList.remove('editing-active');
-
-      const toolbarClone = docClone.querySelector('#editor-toolbar');
-      if (toolbarClone) toolbarClone.classList.add('hidden');
-
-      const fabClone = docClone.querySelector('#exit-preview-fab');
-      if (fabClone) fabClone.classList.add('hidden');
-
-      ['#hero-modal', '#card-modal', '#reset-modal', '#toast'].forEach(selector => {
-        const el = docClone.querySelector(selector);
-        if (el) el.classList.add('hidden');
-      });
-
-      docClone.querySelectorAll('.edit-only').forEach(el => el.classList.add('hidden'));
-      docClone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
-
-      const dataScript = docClone.querySelector('#portfolio-initial-data');
-      if (dataScript) {
-        dataScript.textContent = '\n' + JSON.stringify(state, null, 2) + '\n  ';
+      const cloneHeader = clone.querySelector('#main-header');
+      if (cloneHeader) {
+        cloneHeader.classList.remove('top-12');
+        cloneHeader.classList.add('top-0');
       }
 
-      let finalHTML = '<!DOCTYPE html>\n' + docClone.outerHTML;
-      finalHTML = finalHTML.replace('const DEFAULT_EDIT_MODE = true;', 'const DEFAULT_EDIT_MODE = false;');
+      clone.querySelectorAll('[contenteditable="true"]').forEach(el => {
+        el.removeAttribute('contenteditable');
+      });
 
+      let dataScript = clone.querySelector('#embedded-portfolio-data');
+      if (!dataScript) {
+        dataScript = document.createElement('script');
+        dataScript.id = 'embedded-portfolio-data';
+        dataScript.type = 'application/json';
+        cloneBody.appendChild(dataScript);
+      }
+      dataScript.textContent = JSON.stringify(state);
+
+      const finalHTML = '<!DOCTYPE html>\n' + clone.outerHTML;
       const blob = new Blob([finalHTML], { type: 'text/html;charset=utf-8' });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'index.html';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(url);
-
-      showToast('Archivo index.html exportado listo para GitHub');
     }
 
-    // Atajo de teclado Ctrl+E para activar/desactivar edición en la web publicada
-    document.addEventListener('keydown', e => {
+    // Control de visibilidad del modo edición (público vs ?editar=1 o Ctrl+E)
+    function initEditMode() {
+      const params = new URLSearchParams(window.location.search);
+      const forceEdit = params.get('editar') === '1';
+      const isExported = document.body.getAttribute('data-exported') === 'true';
+      const header = document.getElementById('main-header');
+
+      if (isExported && !forceEdit) {
+        document.body.classList.remove('editing-active');
+        document.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+        if (header) {
+          header.classList.remove('top-12');
+          header.classList.add('top-0');
+        }
+      } else {
+        document.body.classList.add('editing-active');
+        document.querySelectorAll('[data-field]').forEach(el => el.setAttribute('contenteditable', 'true'));
+        if (header) {
+          header.classList.remove('top-0');
+          header.classList.add('top-12');
+        }
+      }
+    }
+
+    // Atajo Ctrl + E para alternar edición en cualquier momento
+    document.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
         e.preventDefault();
-        if (!isEditMode) {
-          isEditMode = true;
-          isPreviewing = false;
-        } else {
-          isPreviewing = !isPreviewing;
+        const isEditing = document.body.classList.toggle('editing-active');
+        const header = document.getElementById('main-header');
+        document.querySelectorAll('[data-field]').forEach(el => {
+          if (isEditing) el.setAttribute('contenteditable', 'true');
+          else el.removeAttribute('contenteditable');
+        });
+        if (header) {
+          header.classList.toggle('top-12', isEditing);
+          header.classList.toggle('top-0', !isEditing);
         }
         renderAll();
       }
     });
 
-    window.addEventListener('DOMContentLoaded', () => {
-      loadState();
-      renderAll();
-    });
+    initEditMode();
+    renderAll();
   </script>
-</body>
-</html>
+
+</body></html>
