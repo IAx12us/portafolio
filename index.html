@@ -273,20 +273,20 @@
         </button>
       </div>
 
-      <div class="space-y-2">
-        <label for="card-url-input" class="block text-xs font-medium text-zinc-300">Enlace de Vimeo, YouTube, Google Drive o URL directa (.mp4 / imagen)</label>
-        <input id="card-url-input" type="text" placeholder="https://vimeo.com/123456789/abcdef12 o https://youtu.be/..." class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 focus:border-white focus:outline-none text-xs text-white placeholder-zinc-600" />
-        <p class="text-[11px] text-zinc-500">
-          Compatible con <span class="text-zinc-300">Vimeo (público u oculto con hash)</span>, YouTube, Shorts, Google Drive, MP4 o imágenes.
-        </p>
-      </div>
-
-      <div id="card-image-upload-wrapper" class="hidden space-y-2 pt-1">
+      <div id="card-image-upload-wrapper" class="hidden space-y-3 pt-1">
         <label class="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl border border-dashed border-zinc-700 hover:border-zinc-500 bg-zinc-950/60 hover:bg-zinc-950 text-xs text-zinc-300 cursor-pointer transition">
           <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
           <span id="card-image-file-label">Subir imagen desde tu computadora</span>
           <input id="card-image-file-input" type="file" accept="image/*" class="hidden" onchange="handleCardImageSelect(event)" />
         </label>
+
+        <div class="space-y-1.5 pt-1">
+          <label for="card-link-url-input" class="block text-xs font-medium text-zinc-300">Enlace al hacer clic en la imagen (opcional)</label>
+          <input id="card-link-url-input" type="text" placeholder="https://drive.google.com/file/d/... o https://..." class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 focus:border-white focus:outline-none text-xs text-white placeholder-zinc-600" />
+          <p class="text-[11px] text-zinc-500">
+            Si agregas una URL aquí, al hacer clic sobre la imagen se abrirá esa página o video en una nueva pestaña.
+          </p>
+        </div>
       </div>
 
       <p id="card-modal-error" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-900/60 rounded-xl p-3"></p>
@@ -628,7 +628,7 @@
 
         const cardsHTML = section.items.map(item => {
           const hasMedia = Boolean(item.url && item.url.trim());
-          const mediaContent = hasMedia
+          const rawMediaHTML = hasMedia
             ? buildMediaHTML(item.url, item.type || 'video', false)
             : `
               <button type="button" onclick="openCardModal('${section.id}', '${item.id}')" class="absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-2.5 p-4 text-center hover:bg-zinc-900/70 transition cursor-pointer">
@@ -639,6 +639,21 @@
                 <span class="text-[11px] text-zinc-500">+ Pegar link de Vimeo, YouTube, Drive o imagen</span>
               </button>
             `;
+
+          const hasTargetLink = hasMedia && (item.type === 'image') && Boolean(item.linkUrl && item.linkUrl.trim());
+          const safeTargetLink = hasTargetLink
+            ? escapeHtml(/^https?:\/\//i.test(item.linkUrl.trim()) ? item.linkUrl.trim() : 'https://' + item.linkUrl.trim())
+            : '';
+
+          const mediaContent = hasTargetLink
+            ? `<a href="${safeTargetLink}" target="_blank" rel="noopener noreferrer" title="Abrir enlace del proyecto" class="block absolute inset-0 w-full h-full cursor-pointer group/img">
+                ${rawMediaHTML}
+                <span class="pointer-events-none absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-950/80 border border-zinc-700/80 text-[10px] font-medium tracking-wider uppercase text-zinc-200 opacity-0 group-hover/img:opacity-100 transition-opacity backdrop-blur-md">
+                  <span>Ver proyecto</span>
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </span>
+              </a>`
+            : rawMediaHTML;
 
           const editOverlay = activeEditing ? `
             <div class="absolute top-3 right-3 z-20 flex items-center gap-1.5 opacity-95">
@@ -806,8 +821,10 @@
       };
 
       const input = document.getElementById('card-url-input');
+      const linkInput = document.getElementById('card-link-url-input');
       const errEl = document.getElementById('card-modal-error');
       input.value = item.url && !item.url.startsWith('data:') ? item.url : '';
+      if (linkInput) linkInput.value = item.linkUrl || '';
       errEl.classList.add('hidden');
       document.getElementById('card-image-file-label').textContent = 'Subir imagen desde tu computadora';
 
@@ -849,6 +866,7 @@
 
     function applyCardMedia() {
       const rawUrl = document.getElementById('card-url-input').value.trim();
+      const rawLinkUrl = (document.getElementById('card-link-url-input')?.value || '').trim();
       const errEl = document.getElementById('card-modal-error');
       errEl.classList.add('hidden');
 
@@ -862,8 +880,10 @@
       const sec = state.sections.find(s => s.id === activeCardTarget.sectionId);
       const item = sec && sec.items.find(i => i.id === activeCardTarget.itemId);
       if (item) {
+        const finalType = pendingCardImageDataUrl ? 'image' : activeCardTarget.mediaType;
         item.url = finalUrl;
-        item.type = pendingCardImageDataUrl ? 'image' : activeCardTarget.mediaType;
+        item.type = finalType;
+        item.linkUrl = finalType === 'image' ? rawLinkUrl : '';
       }
 
       saveState(true);
@@ -877,6 +897,7 @@
       if (item) {
         item.url = '';
         item.type = 'video';
+        item.linkUrl = '';
       }
       saveState(true);
       closeCardModal();
