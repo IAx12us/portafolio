@@ -1,1618 +1,894 @@
 <!DOCTYPE html>
-<html lang="es" class="dark"><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portafolio Audiovisual</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Plus Jakarta Sans e Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest" crossorigin="anonymous"></script>
-
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        matte: {
-                            950: '#0B0B0D', // Negro profundo de fondo
-                            900: '#121215', // Negro mate base
-                        },
-                        lead: {
-                            850: '#18191D', // Tarjeta base
-                            800: '#1E2025', // Superficie elevada
-                            700: '#2A2D34', // Borde sutil plomo
-                            600: '#3E424B', // Borde hover plomo
-                            400: '#9CA3AF', // Texto secundario
-                            300: '#D1D5DB', // Texto medio
-                        }
-                    }
-                }
-            }
+<html lang="es" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>André Arias — Portafolio Audiovisual</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            obsidian: '#09090b',
+            surface: '#121216',
+            borderline: '#1f1f24',
+          }
         }
-    </script>
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #09090b;
+      color: #f4f4f5;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
 
-    <style>
-        /* Estilos base y suavizado de fuentes */
-        body {
-            background-color: #0B0B0D;
-            color: #F4F4F5;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+    /* Estilos de edición activos solo cuando el contenedor tiene .editing-active */
+    .editing-active [contenteditable="true"] {
+      outline: 1px dashed rgba(255, 255, 255, 0.28);
+      outline-offset: 4px;
+      border-radius: 6px;
+      transition: outline-color 0.2s ease, background-color 0.2s ease;
+    }
 
-        /* Capa de imagen de fondo fija con superposición elegante negro/plomo */
-        .bg-backdrop-image {
-            background-position: center center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            transition: background-image 0.5s ease-in-out, opacity 0.4s ease;
-        }
+    .editing-active [contenteditable="true"]:hover,
+    .editing-active [contenteditable="true"]:focus {
+      outline-color: rgba(255, 255, 255, 0.75);
+      background-color: rgba(255, 255, 255, 0.04);
+    }
 
-        .bg-backdrop-overlay {
-            background: 
-                radial-gradient(circle at 20% 15%, rgba(30, 32, 37, 0.45) 0%, rgba(11, 11, 13, 0.88) 65%),
-                linear-gradient(180deg, rgba(11, 11, 13, 0.72) 0%, rgba(11, 11, 13, 0.88) 45%, rgba(11, 11, 13, 0.96) 100%);
-        }
+    /* Ajuste estricto 16:9 sin recortes ni franjas desplazadas para Google Drive */
+    .media-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: #000000;
+      overflow: hidden;
+    }
 
-        /* Degradado cinematográfico para la portada Hero 100vh con video de fondo */
-        .hero-video-vignette {
-            background:
-                linear-gradient(90deg, rgba(11, 11, 13, 0.82) 0%, rgba(11, 11, 13, 0.42) 55%, rgba(11, 11, 13, 0.25) 100%),
-                linear-gradient(0deg, #0B0B0D 0%, rgba(11, 11, 13, 0.65) 28%, rgba(11, 11, 13, 0.2) 65%, rgba(11, 11, 13, 0.5) 100%);
-        }
+    .media-frame iframe,
+    .media-frame video,
+    .media-frame img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
 
-        /* Indicador vertical SCROLL en la esquina inferior derecha */
-        .vertical-scroll-text {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-        }
+    .media-frame video,
+    .media-frame img {
+      object-fit: cover;
+    }
 
-        @keyframes scrollLinePulse {
-            0% { transform: scaleY(0); transform-origin: top; opacity: 0.2; }
-            50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
-            51% { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
-            100% { transform: scaleY(0); transform-origin: bottom; opacity: 0.2; }
-        }
+    /* Barra de desplazamiento minimalista */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #09090b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3f3f46;
+    }
+  </style>
+</head>
+<body class="bg-obsidian text-zinc-100 antialiased selection:bg-white selection:text-black">
 
-        .animate-scroll-line {
-            animation: scrollLinePulse 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-        }
+  <!-- Barra superior de herramientas (visible únicamente en Modo Edición) -->
+  <header id="editor-toolbar" class="hidden fixed top-0 inset-x-0 z-50 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800/80 px-4 py-2.5">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-[11px] font-semibold tracking-[0.18em] uppercase text-zinc-300">Modo Edición Activo</span>
+      </div>
 
-        /* Estilos visuales para elementos editables cuando el Modo Edición está activo */
-        body.edit-mode [contenteditable="true"] {
-            outline: 1px dashed rgba(156, 163, 175, 0.35);
-            outline-offset: 4px;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-            cursor: text;
-        }
-
-        body.edit-mode [contenteditable="true"]:hover {
-            outline-color: rgba(244, 244, 245, 0.65);
-            background-color: rgba(255, 255, 255, 0.03);
-        }
-
-        body.edit-mode [contenteditable="true"]:focus {
-            outline: 1px solid #F4F4F5;
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        /* Ocultar controles de edición cuando se está en Vista Previa */
-        body:not(.edit-mode) .edit-only {
-            display: none !important;
-        }
-
-        /* Animaciones suaves de aparición al hacer scroll (Scroll Reveal) */
-        .reveal-on-scroll {
-            opacity: 0;
-            transform: translateY(36px);
-            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform;
-        }
-
-        .reveal-on-scroll.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Personalización sutil de barra de desplazamiento */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0B0B0D;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #2A2D34;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #3E424B;
-        }
-    </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:"Plus Jakarta Sans", Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.bottom-6{bottom:1.5rem}.right-6{right:1.5rem}.top-0{top:0px}.-right-2\.5{right:-0.625rem}.-top-2\.5{top:-0.625rem}.-z-10{z-index:-10}.z-40{z-index:40}.z-50{z-index:50}.z-20{z-index:20}.mx-3{margin-left:0.75rem;margin-right:0.75rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-1\.5{margin-bottom:0.375rem}.mb-12{margin-bottom:3rem}.mb-14{margin-bottom:3.5rem}.mb-16{margin-bottom:4rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mt-6{margin-top:1.5rem}.ml-0\.5{margin-left:0.125rem}.mt-3{margin-top:0.75rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.aspect-video{aspect-ratio:16 / 9}.h-14{height:3.5rem}.h-2{height:0.5rem}.h-3\.5{height:0.875rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-8{height:2rem}.h-10{height:2.5rem}.h-7{height:1.75rem}.h-full{height:100%}.min-h-screen{min-height:100vh}.min-h-\[1\.25rem\]{min-height:1.25rem}.w-2{width:0.5rem}.w-3\.5{width:0.875rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-8{width:2rem}.w-full{width:100%}.w-10{width:2.5rem}.w-7{width:1.75rem}.max-w-3xl{max-width:48rem}.max-w-7xl{max-width:80rem}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.flex-shrink{flex-shrink:1}.flex-grow{flex-grow:1}.translate-y-20{--tw-translate-y:5rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-lead-600{--tw-border-opacity:1;border-color:rgb(62 66 75 / var(--tw-border-opacity, 1))}.border-lead-700{--tw-border-opacity:1;border-color:rgb(42 45 52 / var(--tw-border-opacity, 1))}.border-lead-700\/60{border-color:rgb(42 45 52 / 0.6)}.border-lead-700\/70{border-color:rgb(42 45 52 / 0.7)}.border-red-900\/60{border-color:rgb(127 29 29 / 0.6)}.border-transparent{border-color:transparent}.border-lead-700\/80{border-color:rgb(42 45 52 / 0.8)}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-emerald-400{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.bg-lead-800{--tw-bg-opacity:1;background-color:rgb(30 32 37 / var(--tw-bg-opacity, 1))}.bg-lead-850{--tw-bg-opacity:1;background-color:rgb(24 25 29 / var(--tw-bg-opacity, 1))}.bg-matte-950{--tw-bg-opacity:1;background-color:rgb(11 11 13 / var(--tw-bg-opacity, 1))}.bg-matte-950\/80{background-color:rgb(11 11 13 / 0.8)}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-red-950\/40{background-color:rgb(69 10 10 / 0.4)}.bg-zinc-100{--tw-bg-opacity:1;background-color:rgb(244 244 245 / var(--tw-bg-opacity, 1))}.bg-lead-850\/90{background-color:rgb(24 25 29 / 0.9)}.p-1{padding:0.25rem}.p-1\.5{padding:0.375rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-3\.5{padding:0.875rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pb-24{padding-bottom:6rem}.pt-12{padding-top:3rem}.pt-4{padding-top:1rem}.pt-0\.5{padding-top:0.125rem}.text-center{text-align:center}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.text-lead-300{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity, 1))}.text-lead-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-matte-950{--tw-text-opacity:1;color:rgb(11 11 13 / var(--tw-text-opacity, 1))}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-zinc-100{--tw-text-opacity:1;color:rgb(244 244 245 / var(--tw-text-opacity, 1))}.text-zinc-200{--tw-text-opacity:1;color:rgb(228 228 231 / var(--tw-text-opacity, 1))}.text-zinc-300{--tw-text-opacity:1;color:rgb(212 212 216 / var(--tw-text-opacity, 1))}.placeholder-zinc-600::placeholder{--tw-placeholder-opacity:1;color:rgb(82 82 91 / var(--tw-placeholder-opacity, 1))}.opacity-0{opacity:0}.opacity-45{opacity:0.45}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-black\/30{--tw-shadow-color:rgb(0 0 0 / 0.3);--tw-shadow:var(--tw-shadow-colored)}.backdrop-blur-\[2px\]{--tw-backdrop-blur:blur(2px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.selection\:bg-lead-600 *::selection{--tw-bg-opacity:1;background-color:rgb(62 66 75 / var(--tw-bg-opacity, 1))}.selection\:text-white *::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.selection\:bg-lead-600::selection{--tw-bg-opacity:1;background-color:rgb(62 66 75 / var(--tw-bg-opacity, 1))}.selection\:text-white::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:border-lead-700:hover{--tw-border-opacity:1;border-color:rgb(42 45 52 / var(--tw-border-opacity, 1))}.hover\:border-zinc-400:hover{--tw-border-opacity:1;border-color:rgb(161 161 170 / var(--tw-border-opacity, 1))}.hover\:border-lead-600:hover{--tw-border-opacity:1;border-color:rgb(62 66 75 / var(--tw-border-opacity, 1))}.hover\:bg-lead-700:hover{--tw-bg-opacity:1;background-color:rgb(42 45 52 / var(--tw-bg-opacity, 1))}.hover\:bg-lead-800:hover{--tw-bg-opacity:1;background-color:rgb(30 32 37 / var(--tw-bg-opacity, 1))}.hover\:bg-red-500:hover{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.hover\:bg-red-950\/30:hover{background-color:rgb(69 10 10 / 0.3)}.hover\:bg-white:hover{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.hover\:bg-lead-800\/40:hover{background-color:rgb(30 32 37 / 0.4)}.hover\:bg-red-950:hover{--tw-bg-opacity:1;background-color:rgb(69 10 10 / var(--tw-bg-opacity, 1))}.hover\:text-red-300:hover{--tw-text-opacity:1;color:rgb(252 165 165 / var(--tw-text-opacity, 1))}.hover\:text-red-400:hover{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:text-zinc-100:hover{--tw-text-opacity:1;color:rgb(244 244 245 / var(--tw-text-opacity, 1))}.hover\:text-zinc-200:hover{--tw-text-opacity:1;color:rgb(228 228 231 / var(--tw-text-opacity, 1))}.focus\:border-zinc-400:focus{--tw-border-opacity:1;border-color:rgb(161 161 170 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.group\/btn:hover .group-hover\/btn\:border-lead-400{--tw-border-opacity:1;border-color:rgb(156 163 175 / var(--tw-border-opacity, 1))}.group\/btn:hover .group-hover\/btn\:text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.group\/btn:hover .group-hover\/btn\:text-zinc-200{--tw-text-opacity:1;color:rgb(228 228 231 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:opacity-100{opacity:1}@media (min-width: 640px){.sm\:mb-16{margin-bottom:4rem}.sm\:mb-20{margin-bottom:5rem}.sm\:inline{display:inline}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:gap-3{gap:0.75rem}.sm\:gap-6{gap:1.5rem}.sm\:px-8{padding-left:2rem;padding-right:2rem}.sm\:pt-16{padding-top:4rem}.sm\:text-5xl{font-size:3rem;line-height:1}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 1024px){.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}}</style></head>
-<body class="edit-mode min-h-screen selection:bg-lead-600 selection:text-white pb-24 relative bg-matte-950">
-
-    <!-- Capa fija de imagen de fondo elegante para las secciones inferiores + velo oscuro -->
-    <div aria-hidden="true" class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-        <div id="bg-image-layer" class="absolute inset-0 bg-backdrop-image opacity-45 scale-105" style="background-image: url(&quot;https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&amp;fit=crop&amp;w=2000&amp;q=80&quot;);"></div>
-        <div class="absolute inset-0 bg-backdrop-overlay backdrop-blur-[2px]"></div>
-    </div>
-
-    <!-- Barra superior discreta de herramientas (flotante sobre el Hero) -->
-    <header id="studio-toolbar" class="fixed top-0 left-0 right-0 z-40 w-full backdrop-blur-md bg-matte-950/65 border-b border-lead-700/50 transition-all">
-        <div class="max-w-7xl mx-auto px-5 sm:px-8 h-14 flex items-center justify-between gap-4">
-            <!-- Indicador de estado -->
-            <div class="flex items-center gap-2.5">
-                <span id="status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span id="mode-label" class="text-xs font-medium tracking-wider uppercase text-lead-300">
-                    Modo Edición Activo
-                </span>
-            </div>
-
-            <!-- Controles principales -->
-            <div class="flex items-center gap-2 sm:gap-3">
-                <!-- Botón Cambiar Video de Portada -->
-                <button onclick="openHeroVideoModal()" class="edit-only inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-lead-800/90 hover:bg-lead-700 text-zinc-200 border border-lead-700 transition-all cursor-pointer" title="Cambiar video de fondo de la portada">
-                    <i data-lucide="video" class="w-3.5 h-3.5 text-lead-400"></i>
-                    <span class="hidden sm:inline">Video Portada</span>
-                </button>
-
-                <!-- Botón Personalizar Imagen de Fondo de Secciones -->
-                <button onclick="openBgModal()" class="edit-only inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-lead-800/90 hover:bg-lead-700 text-zinc-200 border border-lead-700 transition-all cursor-pointer" title="Cambiar imagen de fondo de secciones inferiores">
-                    <i data-lucide="image" class="w-3.5 h-3.5 text-lead-400"></i>
-                    <span class="hidden sm:inline">Fondo</span>
-                </button>
-
-                <!-- Botón Alternar Edición / Vista Previa -->
-                <button id="toggle-edit-btn" onclick="toggleEditMode()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-lead-800/90 hover:bg-lead-700 text-zinc-100 border border-lead-700 transition-all cursor-pointer" title="Alternar entre editar textos/videos y vista previa limpia">
-                    <i data-lucide="eye" class="w-3.5 h-3.5 text-lead-400"></i>
-                    <span id="toggle-edit-text">Vista Previa</span>
-                </button>
-
-                <!-- Botón Guardar -->
-                <button onclick="savePortfolio(true)" class="edit-only inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-lead-800/90 hover:bg-lead-700 text-zinc-200 border border-lead-700 transition-all cursor-pointer" title="Guardar cambios en este navegador">
-                    <i data-lucide="save" class="w-3.5 h-3.5 text-lead-400"></i>
-                    <span class="hidden sm:inline">Guardar</span>
-                </button>
-
-                <!-- Botón Exportar HTML limpio -->
-                <button onclick="exportCleanHTML()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-zinc-100 hover:bg-white text-matte-950 shadow-sm transition-all cursor-pointer" title="Descargar archivo HTML listo para publicar">
-                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                    <span>Exportar Web</span>
-                </button>
-
-                <!-- Botón Reiniciar valores -->
-                <button onclick="openResetModal()" class="edit-only inline-flex items-center justify-center p-1.5 rounded-lg text-lead-400 hover:text-red-400 hover:bg-lead-800 border border-transparent hover:border-lead-700 transition-all cursor-pointer" title="Restaurar plantilla original">
-                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- 1. PORTADA A PANTALLA COMPLETA (100vh) CON VIDEO DE FONDO (ESTILO REFERENCIA VISUAL) -->
-    <section id="hero-fullscreen" class="relative w-full h-screen min-h-[600px] overflow-hidden flex items-end bg-matte-950">
-        
-        <!-- Contenedor del Video de Fondo a pantalla completa -->
-        <div id="hero-bg-video-container" class="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
-            <!-- El video MP4 o iframe de Google Drive se renderiza dinámicamente aquí -->
-        </div>
-
-        <!-- Degradado oscuro sutil (vignette) para legibilidad perfecta -->
-        <div aria-hidden="true" class="absolute inset-0 z-10 hero-video-vignette pointer-events-none"></div>
-
-        <!-- Botón flotante discreto en modo edición para cambiar el video de fondo -->
-        <button onclick="openHeroVideoModal()" class="edit-only absolute top-20 right-5 sm:right-8 z-30 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-matte-950/85 hover:bg-lead-800 text-zinc-200 border border-lead-600/80 text-xs font-medium backdrop-blur-md shadow-xl transition-all cursor-pointer">
-            <i data-lucide="film" class="w-3.5 h-3.5 text-zinc-300"></i>
-            <span>Cambiar video de fondo</span>
+      <div class="flex flex-wrap items-center gap-2">
+        <button type="button" onclick="openHeroModal()" class="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-xs font-medium text-zinc-200 transition flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          Video Portada
         </button>
 
-        <!-- Contenido editorial alineado a la izquierda en la zona media-inferior -->
-        <div class="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-10 pb-16 sm:pb-24 flex items-end justify-between gap-6">
-            <div class="max-w-2xl">
-                <!-- Etiqueta superior pequeña en mayúsculas con espaciado amplio -->
-                <p id="hero-badge" contenteditable="true" spellcheck="false" class="text-[11px] sm:text-xs font-medium tracking-[0.28em] uppercase text-zinc-300/85 mb-4">
-                    PRODUCTOR AUDIOVISUAL · LIMA, PERÚ
-                </p>
+        <button type="button" id="btn-preview-toggle" onclick="togglePreviewMode()" class="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-xs font-medium text-zinc-200 transition flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          <span id="preview-label">Vista Previa</span>
+        </button>
 
-                <!-- NOMBRE en tipografía grande, limpia y contundente -->
-                <h1 id="hero-name" contenteditable="true" spellcheck="false" class="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-zinc-100 uppercase leading-[1.04] mb-5">
-                    NOMBRE
-                </h1>
+        <button type="button" onclick="openResetModal()" title="Restaurar valores de fábrica" class="px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-xs font-medium text-zinc-400 hover:text-zinc-200 transition">
+          Reiniciar
+        </button>
 
-                <!-- BAJADA DESCRIPCIÓN PROFESIONAL -->
-                <p id="hero-subtitle" contenteditable="true" spellcheck="false" class="text-sm sm:text-base font-normal text-zinc-300/90 leading-relaxed max-w-xl mb-8">
-                    BAJADA DESCRIPCIÓN PROFESIONAL — Dirección audiovisual, montaje y narrativa visual minimalista para marcas, cine documental y proyectos comerciales.
-                </p>
+        <button type="button" onclick="exportCleanHTML()" class="px-3.5 py-1.5 rounded-lg bg-white hover:bg-zinc-200 text-zinc-950 text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Exportar Web
+        </button>
+      </div>
+    </div>
+  </header>
 
-                <!-- Botón minimalista con borde fino -->
-                <div class="inline-flex items-center">
-                    <a href="#section-1-anchor" onclick="handleHeroCtaClick(event)" class="inline-flex items-center gap-3 px-6 py-3 border border-zinc-300/45 hover:border-zinc-100 hover:bg-white/10 text-zinc-100 text-[11px] font-medium tracking-[0.22em] uppercase transition-all duration-300 backdrop-blur-[2px]">
-                        <span id="hero-cta-text" contenteditable="true" spellcheck="false">VER PROYECTOS</span>
-                        <span aria-hidden="true" class="text-xs">→</span>
-                    </a>
-                </div>
-            </div>
+  <!-- Botón flotante discreto cuando se activa "Vista Previa" dentro del editor -->
+  <button id="exit-preview-fab" type="button" onclick="togglePreviewMode()" class="hidden fixed bottom-5 right-5 z-50 px-4 py-2 rounded-full bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700 text-xs font-medium text-zinc-200 backdrop-blur-md shadow-xl transition">
+    Volver a Edición
+  </button>
 
-            <!-- Indicador vertical SCROLL en la esquina inferior derecha -->
-            <a href="#section-1-anchor" aria-label="Desplazar hacia abajo" class="hidden sm:flex flex-col items-center gap-3 text-zinc-400 hover:text-zinc-100 transition-colors pb-1">
-                <span class="vertical-scroll-text text-[10px] font-medium tracking-[0.35em] uppercase">SCROLL</span>
-                <span class="w-[1px] h-12 bg-zinc-700 overflow-hidden relative block">
-                    <span class="absolute inset-0 bg-zinc-200 animate-scroll-line"></span>
-                </span>
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main id="app-root">
+    <!-- 1. HERO SECTION A PANTALLA COMPLETA (100vh) -->
+    <section class="relative w-full h-screen min-h-[600px] flex items-end overflow-hidden bg-black">
+      <!-- Contenedor multimedia de fondo -->
+      <div id="hero-media-container" class="absolute inset-0 w-full h-full z-0"></div>
+
+      <!-- Degradado cinematográfico sutil para legibilidad impecable -->
+      <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/45 to-black/35 pointer-events-none z-10"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-[#09090b]/80 via-transparent to-transparent pointer-events-none z-10"></div>
+
+      <!-- Botón flotante para cambiar video de fondo en modo edición -->
+      <button type="button" onclick="openHeroModal()" class="edit-only hidden absolute top-20 right-6 z-30 px-3.5 py-2 rounded-lg bg-zinc-950/85 hover:bg-zinc-900 border border-zinc-700/80 text-xs font-medium text-zinc-200 backdrop-blur-md transition flex items-center gap-2 shadow-lg">
+        <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        Cambiar video de fondo
+      </button>
+
+      <!-- Contenido textual inferior izquierdo -->
+      <div class="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-10 pb-16 sm:pb-20 flex items-end justify-between gap-8">
+        <div class="max-w-2xl space-y-4">
+          <p id="hero-subtitle" data-field="subtitle" class="editable-text text-[11px] sm:text-xs font-medium tracking-[0.26em] uppercase text-zinc-300/90">
+            PRODUCTOR AUDIOVISUAL · LIMA, PERÚ
+          </p>
+
+          <h1 id="hero-title" data-field="title" class="editable-text text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase leading-[0.98]">
+            ANDRÉ ARIAS
+          </h1>
+
+          <p id="hero-bio" data-field="bio" class="editable-text text-sm sm:text-base text-zinc-300/90 font-normal leading-relaxed max-w-xl">
+            Dirección audiovisual, montaje y narrativa visual minimalista para marcas, cine documental y proyectos comerciales.
+          </p>
+
+          <div class="pt-3">
+            <a href="#proyectos" class="inline-flex items-center gap-3 px-6 py-3 rounded-lg border border-zinc-600/80 hover:border-white bg-black/30 hover:bg-white hover:text-black text-xs font-semibold tracking-[0.2em] uppercase text-white transition-all duration-300">
+              <span id="hero-cta" data-field="cta" class="editable-text">VER PROYECTOS</span>
+              <span aria-hidden="true">→</span>
             </a>
+          </div>
         </div>
+
+        <!-- Indicador minimalista SCROLL -->
+        <a href="#proyectos" aria-label="Bajar a proyectos" class="hidden sm:flex flex-col items-center gap-3 text-zinc-400 hover:text-white transition pb-1">
+          <span class="text-[10px] font-medium tracking-[0.3em] uppercase [writing-mode:vertical-rl]">SCROLL</span>
+          <span class="w-px h-12 bg-gradient-to-b from-zinc-400 to-transparent"></span>
+        </a>
+      </div>
     </section>
 
-    <!-- Contenedor Principal de las Secciones Inferiores (aparecen al hacer scroll) -->
-    <main id="portfolio-canvas" class="relative z-20 max-w-7xl mx-auto px-5 sm:px-8 pt-16 sm:pt-24">
-
-        <!-- 2. PRIMERA SECCIÓN (APARECE AL HACER SCROLL): TÍTULO + CUADRÍCULA 4x2 (VIDEO/IMAGEN + DESCRIPCIÓN) -->
-        <section id="section-1-anchor" class="reveal-on-scroll mb-16 sm:mb-24 scroll-mt-20">
-            <div class="flex items-center justify-between gap-4 mb-6">
-                <h2 id="section-1-title" contenteditable="true" spellcheck="false" class="text-lg sm:text-xl font-semibold tracking-wide uppercase text-zinc-200">
-                    TÍTULO
-                </h2>
-                <button onclick="addCardToSection(1)" class="edit-only inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-lead-850 hover:bg-lead-800 text-lead-300 border border-lead-700 transition-all cursor-pointer">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                    <span>Añadir bloque</span>
-                </button>
-            </div>
-
-            <!-- Cuadrícula 4 columnas en escritorio, 2 en tablet, 1 en móvil -->
-            <div id="grid-section-1" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-                <!-- Las 8 tarjetas se renderizan dinámicamente aquí -->
-            </div>
-        </section>
-
-        <!-- 3. SEGUNDA SECCIÓN (APARECE AL HACER SCROLL): TÍTULO + CUADRÍCULA 4x1 (SOLO VIDEO/IMAGEN, SIN DESCRIPCIÓN) -->
-        <section class="reveal-on-scroll mb-12">
-            <div class="flex items-center justify-between gap-4 mb-6">
-                <h2 id="section-2-title" contenteditable="true" spellcheck="false" class="text-lg sm:text-xl font-semibold tracking-wide uppercase text-zinc-200">
-                    TÍTULO
-                </h2>
-                <button onclick="addCardToSection(2)" class="edit-only inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-lead-850 hover:bg-lead-800 text-lead-300 border border-lead-700 transition-all cursor-pointer">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                    <span>Añadir bloque</span>
-                </button>
-            </div>
-
-            <!-- Cuadrícula 4 columnas en escritorio, 2 en tablet, 1 en móvil -->
-            <div id="grid-section-2" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-                <!-- Las 4 tarjetas se renderizan dinámicamente aquí -->
-            </div>
-        </section>
-
-    </main>
-
-    <!-- MODAL MULTIMEDIA: ENLACE DE GOOGLE DRIVE (VIDEO O IMAGEN) / SUBIDA LOCAL -->
-    <div id="drive-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-lead-850 border border-lead-700 rounded-2xl max-w-md w-full p-6 shadow-2xl transform transition-all">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-lead-800 border border-lead-700 flex items-center justify-center text-zinc-200">
-                        <i data-lucide="film" class="w-4 h-4"></i>
-                    </div>
-                    <h3 class="text-base font-semibold text-zinc-100">Enlazar Video o Imagen</h3>
-                </div>
-                <button onclick="closeDriveModal()" class="text-lead-400 hover:text-zinc-100 p-1 rounded-lg transition-colors cursor-pointer">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <!-- Selector de tipo de contenido: Video de Drive vs Imagen -->
-            <div class="grid grid-cols-2 gap-2 p-1 rounded-xl bg-matte-950 border border-lead-700/80 mb-4">
-                <button type="button" id="media-type-video-btn" onclick="setModalMediaType('video')" class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer bg-lead-800 text-zinc-100 shadow-sm">
-                    <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
-                    <span>Video (Drive)</span>
-                </button>
-                <button type="button" id="media-type-image-btn" onclick="setModalMediaType('image')" class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer text-lead-400 hover:text-zinc-200">
-                    <i data-lucide="image" class="w-3.5 h-3.5"></i>
-                    <span>Imagen (Drive / PC)</span>
-                </button>
-            </div>
-
-            <p id="media-helper-text" class="text-xs text-lead-400 leading-relaxed mb-4">
-                Pega el enlace compartido de tu video en Google Drive (con acceso <em>"Cualquier persona con el enlace"</em>). Se mostrará usando el reproductor oficial incrustado de Google Drive.
-            </p>
-
-            <div class="space-y-3">
-                <div>
-                    <label for="drive-url-input" id="drive-url-label" class="block text-xs font-medium text-lead-300 mb-1.5">Enlace de Google Drive</label>
-                    <input 
-                        type="text" 
-                        id="drive-url-input" 
-                        placeholder="https://drive.google.com/file/d/1A2B3C.../view?usp=sharing" 
-                        class="w-full px-3.5 py-2.5 rounded-xl bg-matte-950 border border-lead-700 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-400 transition-colors"
-                    >
-                </div>
-
-                <!-- Subida directa desde computadora (solo visible cuando se elige modo Imagen) -->
-                <div id="local-image-upload-box" class="hidden pt-1">
-                    <div class="relative flex items-center py-1.5 mb-2">
-                        <div class="flex-grow border-t border-lead-700/70"></div>
-                        <span class="flex-shrink mx-3 text-[10px] uppercase tracking-wider text-lead-400">o sube desde tu equipo</span>
-                        <div class="flex-grow border-t border-lead-700/70"></div>
-                    </div>
-                    <label for="card-image-file-input" class="flex items-center justify-center gap-2 w-full px-3.5 py-2.5 rounded-xl bg-matte-950/80 hover:bg-lead-800 border border-dashed border-lead-600 hover:border-zinc-400 text-xs font-medium text-lead-300 hover:text-white transition-all cursor-pointer">
-                        <i data-lucide="upload" class="w-3.5 h-3.5 text-lead-400"></i>
-                        <span id="card-image-file-label">Seleccionar imagen JPG, PNG o WebP</span>
-                    </label>
-                    <input type="file" id="card-image-file-input" accept="image/*" class="hidden" onchange="handleCardImageUpload(event)">
-                </div>
-
-                <div id="drive-error-msg" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-900/60 rounded-lg px-3 py-2">
-                    Por favor ingresa un enlace válido de Google Drive o una URL de imagen.
-                </div>
-            </div>
-
-            <div class="flex items-center justify-between gap-3 mt-6 pt-4 border-t border-lead-700/60">
-                <button id="remove-video-btn" onclick="removeCurrentVideo()" class="text-xs font-medium text-red-400 hover:text-red-300 px-2 py-1.5 rounded-lg hover:bg-red-950/30 transition-colors cursor-pointer">
-                    Quitar archivo
-                </button>
-                <div class="flex items-center gap-2">
-                    <button onclick="closeDriveModal()" class="px-4 py-2 rounded-xl text-xs font-medium text-lead-300 hover:text-white bg-lead-800 hover:bg-lead-700 transition-colors cursor-pointer">
-                        Cancelar
-                    </button>
-                    <button onclick="applyDriveVideo()" class="px-4 py-2 rounded-xl text-xs font-medium bg-zinc-100 hover:bg-white text-matte-950 transition-colors cursor-pointer">
-                        Guardar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL PARA EL VIDEO DE FONDO DE LA PORTADA (HERO 100vh) -->
-    <div id="hero-video-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-lead-850 border border-lead-700 rounded-2xl max-w-md w-full p-6 shadow-2xl transform transition-all">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-lead-800 border border-lead-700 flex items-center justify-center text-zinc-200">
-                        <i data-lucide="video" class="w-4 h-4"></i>
-                    </div>
-                    <h3 class="text-base font-semibold text-zinc-100">Video de Fondo de Portada</h3>
-                </div>
-                <button onclick="closeHeroVideoModal()" class="text-lead-400 hover:text-zinc-100 p-1 rounded-lg transition-colors cursor-pointer">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <p class="text-xs text-lead-400 leading-relaxed mb-4">
-                Pega un enlace de video de <strong>Google Drive</strong> (público), una URL directa <strong>.mp4 / .webm</strong> o sube un clip desde tu equipo. Se reproducirá en bucle silencioso a pantalla completa.
-            </p>
-
-            <div class="space-y-4">
-                <div>
-                    <label for="hero-video-url-input" class="block text-xs font-medium text-lead-300 mb-1.5">Enlace de Google Drive o URL directa (.mp4)</label>
-                    <input 
-                        type="text" 
-                        id="hero-video-url-input" 
-                        placeholder="https://drive.google.com/file/d/... o https://.../video.mp4" 
-                        class="w-full px-3.5 py-2.5 rounded-xl bg-matte-950 border border-lead-700 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-400 transition-colors"
-                    >
-                </div>
-
-                <!-- Separador visual -->
-                <div class="relative flex items-center py-1">
-                    <div class="flex-grow border-t border-lead-700/70"></div>
-                    <span class="flex-shrink mx-3 text-[11px] uppercase tracking-wider text-lead-400">o sube desde tu computadora</span>
-                    <div class="flex-grow border-t border-lead-700/70"></div>
-                </div>
-
-                <!-- Subida de archivo local MP4/WebM -->
-                <div>
-                    <label for="hero-video-file-input" class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-matte-950/80 hover:bg-lead-800 border border-dashed border-lead-600 hover:border-zinc-400 text-xs font-medium text-lead-300 hover:text-white transition-all cursor-pointer">
-                        <i data-lucide="upload" class="w-4 h-4 text-lead-400"></i>
-                        <span id="hero-video-file-label">Seleccionar archivo de video MP4 o WebM</span>
-                    </label>
-                    <input type="file" id="hero-video-file-input" accept="video/mp4,video/webm,video/*" class="hidden" onchange="handleHeroVideoUpload(event)">
-                </div>
-
-                <div id="hero-video-error-msg" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-900/60 rounded-lg px-3 py-2">
-                    Por favor ingresa un enlace válido de Google Drive, una URL .mp4 o sube un archivo.
-                </div>
-            </div>
-
-            <div class="flex items-center justify-between gap-3 mt-6 pt-4 border-t border-lead-700/60">
-                <button onclick="restoreDefaultHeroVideo()" class="text-xs font-medium text-lead-400 hover:text-zinc-200 px-2 py-1.5 rounded-lg hover:bg-lead-800 transition-colors cursor-pointer">
-                    Restaurar video base
-                </button>
-                <div class="flex items-center gap-2">
-                    <button onclick="closeHeroVideoModal()" class="px-4 py-2 rounded-xl text-xs font-medium text-lead-300 hover:text-white bg-lead-800 hover:bg-lead-700 transition-colors cursor-pointer">
-                        Cancelar
-                    </button>
-                    <button onclick="applyHeroVideoUrl()" class="px-4 py-2 rounded-xl text-xs font-medium bg-zinc-100 hover:bg-white text-matte-950 transition-colors cursor-pointer">
-                        Aplicar Video
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL PARA CAMBIAR IMAGEN DE FONDO -->
-    <div id="bg-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-lead-850 border border-lead-700 rounded-2xl max-w-md w-full p-6 shadow-2xl transform transition-all">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-lead-800 border border-lead-700 flex items-center justify-center text-zinc-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="image" aria-hidden="true" class="lucide lucide-image w-4 h-4"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>
-                    </div>
-                    <h3 class="text-base font-semibold text-zinc-100">Imagen de Fondo</h3>
-                </div>
-                <button onclick="closeBgModal()" class="text-lead-400 hover:text-zinc-100 p-1 rounded-lg transition-colors cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="x" aria-hidden="true" class="lucide lucide-x w-5 h-5"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-                </button>
-            </div>
-
-            <p class="text-xs text-lead-400 leading-relaxed mb-4">
-                Personaliza el ambiente de tu portafolio pegando el enlace de una imagen o subiendo un archivo desde tu equipo. El sistema aplicará automáticamente un velo oscuro elegante para conservar la legibilidad.
-            </p>
-
-            <div class="space-y-4">
-                <!-- Opción 1: Pegar URL -->
-                <div>
-                    <label for="bg-url-input" class="block text-xs font-medium text-lead-300 mb-1.5">Enlace (URL) de imagen</label>
-                    <input type="text" id="bg-url-input" placeholder="https://images.unsplash.com/..." class="w-full px-3.5 py-2.5 rounded-xl bg-matte-950 border border-lead-700 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-400 transition-colors">
-                </div>
-
-                <!-- Separador visual -->
-                <div class="relative flex items-center py-1">
-                    <div class="flex-grow border-t border-lead-700/70"></div>
-                    <span class="flex-shrink mx-3 text-[11px] uppercase tracking-wider text-lead-400">o sube desde tu computadora</span>
-                    <div class="flex-grow border-t border-lead-700/70"></div>
-                </div>
-
-                <!-- Opción 2: Subir archivo local -->
-                <div>
-                    <label for="bg-file-input" class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-matte-950/80 hover:bg-lead-800 border border-dashed border-lead-600 hover:border-zinc-400 text-xs font-medium text-lead-300 hover:text-white transition-all cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="upload" aria-hidden="true" class="lucide lucide-upload w-4 h-4 text-lead-400"><path d="M12 3v12"></path><path d="m17 8-5-5-5 5"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg>
-                        <span id="bg-file-label">Seleccionar archivo JPG, PNG o WebP</span>
-                    </label>
-                    <input type="file" id="bg-file-input" accept="image/*" class="hidden" onchange="handleBgFileUpload(event)">
-                </div>
-
-                <div id="bg-error-msg" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-900/60 rounded-lg px-3 py-2">
-                    Por favor ingresa una URL válida o selecciona una imagen.
-                </div>
-            </div>
-
-            <div class="flex items-center justify-between gap-3 mt-6 pt-4 border-t border-lead-700/60">
-                <button onclick="restoreDefaultBg()" class="text-xs font-medium text-lead-400 hover:text-zinc-200 px-2 py-1.5 rounded-lg hover:bg-lead-800 transition-colors cursor-pointer">
-                    Restaurar fondo base
-                </button>
-                <div class="flex items-center gap-2">
-                    <button onclick="closeBgModal()" class="px-4 py-2 rounded-xl text-xs font-medium text-lead-300 hover:text-white bg-lead-800 hover:bg-lead-700 transition-colors cursor-pointer">
-                        Cancelar
-                    </button>
-                    <button onclick="applyBgUrl()" class="px-4 py-2 rounded-xl text-xs font-medium bg-zinc-100 hover:bg-white text-matte-950 transition-colors cursor-pointer">
-                        Aplicar Fondo
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL DE CONFIRMACIÓN PARA RESTAURAR -->
-    <div id="reset-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-lead-850 border border-lead-700 rounded-2xl max-w-sm w-full p-6 shadow-2xl">
-            <h3 class="text-base font-semibold text-zinc-100 mb-2">¿Restaurar plantilla original?</h3>
-            <p class="text-xs text-lead-400 leading-relaxed mb-6">
-                Se borrarán los textos personalizados y enlaces guardados en este navegador, volviendo al diseño base de 8 + 4 videos.
-            </p>
-            <div class="flex justify-end gap-2">
-                <button onclick="closeResetModal()" class="px-4 py-2 rounded-xl text-xs font-medium text-lead-300 bg-lead-800 hover:bg-lead-700 transition-colors cursor-pointer">
-                    Cancelar
-                </button>
-                <button onclick="confirmReset()" class="px-4 py-2 rounded-xl text-xs font-medium bg-red-600 hover:bg-red-500 text-white transition-colors cursor-pointer">
-                    Restaurar
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- NOTIFICACIÓN TOAST FLOTANTE -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
-        <div class="flex items-center gap-2.5 bg-lead-800 border border-lead-600 text-zinc-100 px-4 py-3 rounded-xl shadow-xl text-xs font-medium">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle-2" aria-hidden="true" class="lucide lucide-check-circle-2 w-4 h-4 text-emerald-400"><circle cx="12" cy="12" r="10"></circle><path d="m16 9-5.5 5.5L8 12"></path></svg>
-            <span id="toast-message">Cambios guardados</span>
-        </div>
-    </div>
-
-    <script>
-        // Clave de almacenamiento local
-        const STORAGE_KEY = 'minimal_video_portfolio_v3';
-
-        // Video ambiental oscuro de muestra por defecto para la portada 100vh
-        const DEFAULT_HERO_VIDEO_URL = 'https://assets.mixkit.co/videos/preview/mixkit-fog-over-a-pine-forest-in-the-mountains-32888-large.mp4';
-
-        // Imagen de fondo por defecto para las secciones inferiores: arquitectura abstracta minimalista oscura
-        const DEFAULT_BG_IMAGE = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=2000&q=80';
-
-        // Estado inicial: Portada 100vh con video de fondo + 8 tarjetas con descripción + 4 tarjetas solo multimedia
-        const defaultState = {
-            bgImage: DEFAULT_BG_IMAGE,
-            badge: 'PRODUCTOR AUDIOVISUAL · LIMA, PERÚ',
-            name: 'NOMBRE',
-            subtitle: 'BAJADA DESCRIPCIÓN PROFESIONAL — Dirección audiovisual, montaje y narrativa visual minimalista para marcas, cine documental y proyectos comerciales.',
-            ctaText: 'VER PROYECTOS',
-            heroVideo: {
-                sourceType: 'url', // 'drive' | 'url' | 'local'
-                driveId: '',
-                videoUrl: DEFAULT_HERO_VIDEO_URL
-            },
-            section1Title: 'TÍTULO',
-            section1Cards: Array.from({ length: 8 }, (_, i) => ({
-                id: `s1-${i + 1}`,
-                mediaType: 'video',
-                driveId: '',
-                imageUrl: '',
-                description: 'DESCRIPCIÓN'
-            })),
-            section2Title: 'TÍTULO',
-            section2Cards: Array.from({ length: 4 }, (_, i) => ({
-                id: `s2-${i + 1}`,
-                mediaType: 'video',
-                driveId: '',
-                imageUrl: ''
-            }))
-        };
-
-        let state = JSON.parse(JSON.stringify(defaultState));
-        let isEditMode = true;
-        let activeCardContext = null; // { section: 1 | 2, index: number }
-        let currentModalMediaType = 'video';
-        let scrollObserver = null;
-
-        /**
-         * Extrae el ID limpio de un archivo de Google Drive desde distintos formatos de URL o ID directo.
-         */
-        function extractGoogleDriveId(input) {
-            if (!input) return null;
-            const trimmed = input.trim();
-
-            // Patrón 1: /file/d/ID/
-            const fileMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]{15,})/);
-            if (fileMatch && fileMatch[1]) return fileMatch[1];
-
-            // Patrón 2: ?id=ID o &id=ID
-            const idParamMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]{15,})/);
-            if (idParamMatch && idParamMatch[1]) return idParamMatch[1];
-
-            // Patrón 3: Solo el ID alfanumérico pegado directamente
-            if (/^[a-zA-Z0-9_-]{20,}$/.test(trimmed)) {
-                return trimmed;
-            }
-
-            return null;
-        }
-
-        /**
-         * Convierte un enlace de Google Drive en URL directa de imagen de alta resolución
-         */
-        function resolveImageSource(item) {
-            if (item.imageUrl) return item.imageUrl;
-            if (item.driveId) return `https://lh3.googleusercontent.com/d/${item.driveId}=w1600`;
-            return '';
-        }
-
-        /**
-         * Carga los datos desde localStorage si existen (migrando datos anteriores si aplica)
-         */
-        function loadPortfolio() {
-            try {
-                const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('minimal_video_portfolio_v2') || localStorage.getItem('minimal_video_portfolio_v1');
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    state = { ...defaultState, ...parsed };
-                    if (!state.bgImage) state.bgImage = DEFAULT_BG_IMAGE;
-                    if (!state.ctaText) state.ctaText = 'VER PROYECTOS';
-                    if (!state.heroVideo || (!state.heroVideo.driveId && !state.heroVideo.videoUrl)) {
-                        state.heroVideo = {
-                            sourceType: 'url',
-                            driveId: '',
-                            videoUrl: DEFAULT_HERO_VIDEO_URL
-                        };
-                    }
-
-                    // Asegurar compatibilidad con tarjetas previas sin mediaType
-                    state.section1Cards = state.section1Cards.map(c => ({
-                        mediaType: 'video',
-                        imageUrl: '',
-                        ...c
-                    }));
-                    state.section2Cards = state.section2Cards.map(c => ({
-                        mediaType: 'video',
-                        imageUrl: '',
-                        ...c
-                    }));
-                }
-            } catch (e) {
-                console.error('Error al cargar desde localStorage:', e);
-            }
-        }
-
-        /**
-         * Aplica la imagen de fondo actual a la capa visual
-         */
-        function applyBackgroundLayer() {
-            const bgLayer = document.getElementById('bg-image-layer');
-            if (!bgLayer) return;
-            const url = state.bgImage || DEFAULT_BG_IMAGE;
-            bgLayer.style.backgroundImage = `url("${url.replace(/"/g, '\\"')}")`;
-        }
-
-        /**
-         * Renderiza el video de fondo a pantalla completa (100vh) de la portada
-         */
-        function renderHeroBackgroundVideo() {
-            const container = document.getElementById('hero-bg-video-container');
-            if (!container) return;
-
-            const hv = state.heroVideo || defaultState.heroVideo;
-
-            if (hv.sourceType === 'drive' && hv.driveId) {
-                // Reproductor oficial de Google Drive escalado para cubrir pantalla completa sin bordes negros
-                const embedUrl = `https://drive.google.com/file/d/${hv.driveId}/preview`;
-                container.innerHTML = `
-                    <iframe 
-                        src="${embedUrl}" 
-                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.78vh] min-w-full h-[56.25vw] min-h-full border-0 opacity-75 pointer-events-none" 
-                        allow="autoplay; fullscreen" 
-                        loading="eager">
-                    </iframe>
-                `;
-            } else {
-                const videoSrc = hv.videoUrl || DEFAULT_HERO_VIDEO_URL;
-                container.innerHTML = `
-                    <video 
-                        src="${escapeHTML(videoSrc)}" 
-                        poster="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2000&q=80"
-                        autoplay 
-                        loop 
-                        muted 
-                        playsinline 
-                        class="w-full h-full object-cover opacity-80 scale-[1.01]">
-                    </video>
-                `;
-            }
-        }
-
-        /**
-         * Evita navegar al hacer clic dentro del texto editable del botón CTA en modo edición
-         */
-        function handleHeroCtaClick(event) {
-            if (isEditMode && event.target && event.target.id === 'hero-cta-text') {
-                event.preventDefault();
-            }
-        }
-
-        /**
-         * Sincroniza textos editables del DOM hacia el objeto state y guarda en localStorage
-         */
-        function savePortfolio(showNotification = false) {
-            try {
-                const badgeEl = document.getElementById('hero-badge');
-                if (badgeEl) state.badge = badgeEl.innerText.trim() || 'PRODUCTOR AUDIOVISUAL · LIMA, PERÚ';
-                state.name = document.getElementById('hero-name').innerText.trim() || 'NOMBRE';
-                state.subtitle = document.getElementById('hero-subtitle').innerText.trim() || 'BAJADA DESCRIPCIÓN PROFESIONAL';
-                const ctaEl = document.getElementById('hero-cta-text');
-                if (ctaEl) state.ctaText = ctaEl.innerText.trim() || 'VER PROYECTOS';
-                state.section1Title = document.getElementById('section-1-title').innerText.trim() || 'TÍTULO';
-                state.section2Title = document.getElementById('section-2-title').innerText.trim() || 'TÍTULO';
-
-                // Capturar descripciones actualizadas de la sección 1
-                const descElements = document.querySelectorAll('[data-s1-desc-index]');
-                descElements.forEach(el => {
-                    const idx = parseInt(el.getAttribute('data-s1-desc-index'), 10);
-                    if (state.section1Cards[idx]) {
-                        state.section1Cards[idx].description = el.innerText.trim();
-                    }
-                });
-
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-                if (showNotification) {
-                    showToast('Portafolio guardado en el navegador');
-                }
-            } catch (e) {
-                console.error('Error al guardar (posible límite de almacenamiento por video local pesado):', e);
-                if (showNotification) {
-                    showToast('Cambios aplicados en la sesión actual');
-                }
-            }
-        }
-
-        /**
-         * Genera el contenido interno (Video Drive, Imagen o Placeholder) para un slot multimedia de las grillas
-         */
-        function renderMediaInnerHTML(item, sectionKey, index) {
-            const type = item.mediaType || 'video';
-            const hasVideo = type === 'video' && Boolean(item.driveId);
-            const imgSrc = type === 'image' ? resolveImageSource(item) : '';
-            const hasImage = type === 'image' && Boolean(imgSrc);
-
-            if (hasVideo) {
-                const embedUrl = `https://drive.google.com/file/d/${item.driveId}/preview`;
-                return `
-                    <iframe 
-                        src="${embedUrl}" 
-                        class="w-full h-full border-0" 
-                        allow="autoplay; fullscreen" 
-                        allowfullscreen
-                        loading="lazy">
-                    </iframe>
-                    <button 
-                        onclick="openDriveModal('${sectionKey}', ${index})" 
-                        class="edit-only absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-matte-950/90 hover:bg-lead-800 text-zinc-200 border border-lead-600 text-xs font-medium backdrop-blur-md shadow-lg transition-all cursor-pointer">
-                        <i data-lucide="link" class="w-3.5 h-3.5"></i>
-                        <span>Cambiar enlace</span>
-                    </button>
-                `;
-            }
-
-            if (hasImage) {
-                const fallbackAttr = item.driveId
-                    ? `onerror="this.onerror=null;this.src='https://drive.google.com/uc?export=view&id=${item.driveId}';"`
-                    : '';
-                return `
-                    <img 
-                        src="${escapeHTML(imgSrc)}" 
-                        alt="Proyecto audiovisual" 
-                        ${fallbackAttr}
-                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]" 
-                        loading="lazy"
-                    />
-                    <button 
-                        onclick="openDriveModal('${sectionKey}', ${index})" 
-                        class="edit-only absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-matte-950/90 hover:bg-lead-800 text-zinc-200 border border-lead-600 text-xs font-medium backdrop-blur-md shadow-lg transition-all cursor-pointer">
-                        <i data-lucide="image" class="w-3.5 h-3.5"></i>
-                        <span>Cambiar imagen</span>
-                    </button>
-                `;
-            }
-
-            // Placeholder elegante cuando aún no hay video ni imagen
-            return `
-                <button 
-                    onclick="openDriveModal('${sectionKey}', ${index})" 
-                    class="w-full h-full flex flex-col items-center justify-center gap-2.5 p-4 text-center group/btn hover:bg-lead-800/40 transition-colors cursor-pointer">
-                    <div class="w-10 h-10 rounded-full bg-lead-800 border border-lead-700 group-hover/btn:border-lead-400 flex items-center justify-center text-lead-300 group-hover/btn:text-white transition-all shadow-lg">
-                        <i data-lucide="play" class="w-4 h-4 ml-0.5"></i>
-                    </div>
-                    <span class="text-xs font-semibold tracking-widest uppercase text-zinc-300">
-                        VIDEO / IMAGEN
-                    </span>
-                    <span class="edit-only text-xs text-lead-400 group-hover/btn:text-zinc-200 transition-colors">
-                        + Pegar link de Google Drive o imagen
-                    </span>
-                </button>
-            `;
-        }
-
-        /**
-         * Renderiza todo el portafolio en pantalla
-         */
-        function renderPortfolio() {
-            applyBackgroundLayer();
-            renderHeroBackgroundVideo();
-
-            document.getElementById('hero-badge').innerText = state.badge || 'PRODUCTOR AUDIOVISUAL · LIMA, PERÚ';
-            document.getElementById('hero-name').innerText = state.name;
-            document.getElementById('hero-subtitle').innerText = state.subtitle;
-            document.getElementById('hero-cta-text').innerText = state.ctaText || 'VER PROYECTOS';
-            document.getElementById('section-1-title').innerText = state.section1Title;
-            document.getElementById('section-2-title').innerText = state.section2Title;
-
-            // Renderizar Sección 1 (4x2 con descripción debajo)
-            const grid1 = document.getElementById('grid-section-1');
-            grid1.innerHTML = state.section1Cards.map((card, index) => createCardHTML(card, 1, index, true)).join('');
-
-            // Renderizar Sección 2 (4x1 solo multimedia, sin descripción)
-            const grid2 = document.getElementById('grid-section-2');
-            grid2.innerHTML = state.section2Cards.map((card, index) => createCardHTML(card, 2, index, false)).join('');
-
-            // Inicializar iconos de Lucide
-            lucide.createIcons();
-
-            // Re-vincular autoguardado al escribir y animaciones de scroll
-            bindAutoSaveListeners();
-            initScrollReveal();
-        }
-
-        /**
-         * Genera el HTML de cada tarjeta multimedia siguiendo la estética minimalista negro/plomo
-         */
-        function createCardHTML(card, sectionNum, index, hasDescription) {
-            return `
-                <article class="group relative bg-lead-850/90 backdrop-blur-md border border-lead-700/80 hover:border-lead-600 rounded-xl p-3.5 transition-all duration-300 flex flex-col justify-between shadow-lg shadow-black/30">
-                    
-                    <!-- Botón eliminar tarjeta (solo visible en modo edición) -->
-                    <button 
-                        onclick="deleteCard(${sectionNum}, ${index})" 
-                        class="edit-only opacity-0 group-hover:opacity-100 absolute -top-2.5 -right-2.5 z-20 w-7 h-7 rounded-full bg-lead-800 hover:bg-red-950 text-lead-400 hover:text-red-400 border border-lead-600 flex items-center justify-center shadow-md transition-all cursor-pointer"
-                        title="Eliminar este bloque">
-                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                    </button>
-
-                    <!-- Contenedor Multimedia 16:9 -->
-                    <div class="relative w-full aspect-video bg-matte-950 rounded-lg overflow-hidden border border-lead-700/60 flex items-center justify-center">
-                        ${renderMediaInnerHTML(card, sectionNum, index)}
-                    </div>
-
-                    ${hasDescription ? `
-                        <!-- Texto DESCRIPCIÓN editable (solo en la primera cuadrícula) -->
-                        <div class="mt-3 pt-0.5">
-                            <p 
-                                contenteditable="${isEditMode}" 
-                                spellcheck="false"
-                                data-s1-desc-index="${index}"
-                                class="text-xs sm:text-sm font-normal text-lead-300 leading-relaxed min-h-[1.25rem]">
-                                ${escapeHTML(card.description)}
-                            </p>
-                        </div>
-                    ` : ''}
-                </article>
-            `;
-        }
-
-        /**
-         * Configura IntersectionObserver para revelar las secciones suavemente al hacer scroll
-         */
-        function initScrollReveal() {
-            const revealElements = document.querySelectorAll('.reveal-on-scroll');
-            if (!('IntersectionObserver' in window)) {
-                revealElements.forEach(el => el.classList.add('is-visible'));
-                return;
-            }
-
-            if (scrollObserver) {
-                scrollObserver.disconnect();
-            }
-
-            scrollObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        scrollObserver.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.12,
-                rootMargin: '0px 0px -40px 0px'
-            });
-
-            revealElements.forEach(el => scrollObserver.observe(el));
-        }
-
-        /**
-         * Escapa caracteres HTML para evitar inyecciones al renderizar textos
-         */
-        function escapeHTML(str) {
-            if (!str) return '';
-            return str
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
-        }
-
-        /**
-         * Escucha cambios en los elementos contenteditable para guardar automáticamente
-         */
-        function bindAutoSaveListeners() {
-            const editables = document.querySelectorAll('[contenteditable="true"]');
-            editables.forEach(el => {
-                el.addEventListener('blur', () => savePortfolio(false));
-            });
-        }
-
-        /**
-         * Alterna entre Modo Edición y Vista Previa limpia
-         */
-        function toggleEditMode() {
-            savePortfolio(false);
-            isEditMode = !isEditMode;
-
-            const body = document.body;
-            const modeLabel = document.getElementById('mode-label');
-            const statusDot = document.getElementById('status-dot');
-            const toggleBtn = document.getElementById('toggle-edit-btn');
-
-            if (isEditMode) {
-                body.classList.add('edit-mode');
-                modeLabel.innerText = 'Modo Edición Activo';
-                statusDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
-                toggleBtn.innerHTML = `<i data-lucide="eye" class="w-3.5 h-3.5 text-lead-400"></i><span id="toggle-edit-text">Vista Previa</span>`;
-            } else {
-                body.classList.remove('edit-mode');
-                modeLabel.innerText = 'Vista Previa';
-                statusDot.className = 'w-2 h-2 rounded-full bg-lead-400';
-                toggleBtn.innerHTML = `<i data-lucide="pencil" class="w-3.5 h-3.5 text-lead-400"></i><span id="toggle-edit-text">Editar Portafolio</span>`;
-            }
-
-            // Actualizar atributo contenteditable en todos los textos
-            document.querySelectorAll('#hero-badge, #hero-name, #hero-subtitle, #hero-cta-text, #section-1-title, #section-2-title, [data-s1-desc-index]').forEach(el => {
-                el.setAttribute('contenteditable', isEditMode ? 'true' : 'false');
-            });
-
-            lucide.createIcons();
-        }
-
-        /**
-         * Cambia entre pestaña Video (Drive) e Imagen (Drive / Local) dentro del modal
-         */
-        function setModalMediaType(type) {
-            currentModalMediaType = type;
-            const videoBtn = document.getElementById('media-type-video-btn');
-            const imageBtn = document.getElementById('media-type-image-btn');
-            const helperText = document.getElementById('media-helper-text');
-            const label = document.getElementById('drive-url-label');
-            const input = document.getElementById('drive-url-input');
-            const localUploadBox = document.getElementById('local-image-upload-box');
-
-            document.getElementById('drive-error-msg').classList.add('hidden');
-
-            if (type === 'video') {
-                videoBtn.className = 'flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer bg-lead-800 text-zinc-100 shadow-sm';
-                imageBtn.className = 'flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer text-lead-400 hover:text-zinc-200';
-                helperText.innerHTML = 'Pega el enlace compartido de tu video en Google Drive (con acceso <em>"Cualquier persona con el enlace"</em>). Se mostrará con el reproductor oficial incrustado de Google Drive.';
-                label.innerText = 'Enlace de video en Google Drive';
-                input.placeholder = 'https://drive.google.com/file/d/1A2B3C.../view?usp=sharing';
-                localUploadBox.classList.add('hidden');
-            } else {
-                imageBtn.className = 'flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer bg-lead-800 text-zinc-100 shadow-sm';
-                videoBtn.className = 'flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer text-lead-400 hover:text-zinc-200';
-                helperText.innerHTML = 'Pega el enlace compartido de una imagen en Google Drive (pública), una URL web directa, o sube una fotografía desde tu equipo.';
-                label.innerText = 'Enlace de imagen en Google Drive o URL';
-                input.placeholder = 'https://drive.google.com/file/d/1A2B3C.../view?usp=sharing';
-                localUploadBox.classList.remove('hidden');
-            }
-        }
-
-        /**
-         * Obtiene el objeto de datos correspondiente al contexto activo (1 o 2)
-         */
-        function getActiveTargetItem() {
-            if (!activeCardContext) return null;
-            const { section, index } = activeCardContext;
-            if (String(section) === '1') return state.section1Cards[index];
-            return state.section2Cards[index];
-        }
-
-        /**
-         * Abre el modal para configurar el enlace de Google Drive o imagen de un bloque
-         */
-        function openDriveModal(sectionKey, index) {
-            if (!isEditMode) return;
-            savePortfolio(false);
-            activeCardContext = { section: sectionKey, index: Number(index) };
-
-            const item = getActiveTargetItem();
-            const input = document.getElementById('drive-url-input');
-            const errorMsg = document.getElementById('drive-error-msg');
-            const removeBtn = document.getElementById('remove-video-btn');
-            const fileLabel = document.getElementById('card-image-file-label');
-
-            errorMsg.classList.add('hidden');
-            fileLabel.innerText = 'Seleccionar imagen JPG, PNG o WebP';
-
-            const initialType = item.mediaType || 'video';
-            setModalMediaType(initialType);
-
-            if (item.driveId) {
-                input.value = `https://drive.google.com/file/d/${item.driveId}/view`;
-            } else if (item.imageUrl && !item.imageUrl.startsWith('data:')) {
-                input.value = item.imageUrl;
-            } else {
-                input.value = '';
-            }
-
-            const hasExistingContent = Boolean(item.driveId || item.imageUrl);
-            removeBtn.style.visibility = hasExistingContent ? 'visible' : 'hidden';
-
-            const modal = document.getElementById('drive-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            setTimeout(() => input.focus(), 50);
-        }
-
-        function closeDriveModal() {
-            const modal = document.getElementById('drive-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            activeCardContext = null;
-        }
-
-        /**
-         * Valida y aplica el enlace de Google Drive (video o imagen) o URL directa
-         */
-        function applyDriveVideo() {
-            const item = getActiveTargetItem();
-            if (!item) return;
-
-            const rawUrl = document.getElementById('drive-url-input').value.trim();
-            const errorMsg = document.getElementById('drive-error-msg');
-            const extractedDriveId = extractGoogleDriveId(rawUrl);
-
-            if (currentModalMediaType === 'video') {
-                if (!extractedDriveId) {
-                    errorMsg.innerText = 'No se detectó un ID válido de Google Drive para el video. Verifica el enlace.';
-                    errorMsg.classList.remove('hidden');
-                    return;
-                }
-                item.mediaType = 'video';
-                item.driveId = extractedDriveId;
-                item.imageUrl = '';
-            } else {
-                // Modo Imagen: acepta enlace de Google Drive o URL directa de imagen
-                if (extractedDriveId) {
-                    item.mediaType = 'image';
-                    item.driveId = extractedDriveId;
-                    item.imageUrl = '';
-                } else if (/^https?:\/\/.+/i.test(rawUrl)) {
-                    item.mediaType = 'image';
-                    item.driveId = '';
-                    item.imageUrl = rawUrl;
-                } else {
-                    errorMsg.innerText = 'Ingresa un enlace válido de Google Drive, una URL http(s) o sube una imagen local.';
-                    errorMsg.classList.remove('hidden');
-                    return;
-                }
-            }
-
-            closeDriveModal();
-            renderPortfolio();
-            savePortfolio(true);
-        }
-
-        /**
-         * Permite subir una imagen local optimizada a cualquier bloque del portafolio
-         */
-        function handleCardImageUpload(event) {
-            const item = getActiveTargetItem();
-            const file = event.target.files && event.target.files[0];
-            if (!item || !file) return;
-
-            document.getElementById('card-image-file-label').innerText = file.name;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const maxDim = 1600;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > maxDim || height > maxDim) {
-                        if (width > height) {
-                            height = Math.round((height * maxDim) / width);
-                            width = maxDim;
-                        } else {
-                            width = Math.round((width * maxDim) / height);
-                            height = maxDim;
-                        }
-                    }
-
-                    const canvas = document.createElement('canvas');
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    item.mediaType = 'image';
-                    item.driveId = '';
-                    item.imageUrl = canvas.toDataURL('image/jpeg', 0.85);
-
-                    closeDriveModal();
-                    renderPortfolio();
-                    savePortfolio(true);
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            event.target.value = '';
-        }
-
-        function removeCurrentVideo() {
-            const item = getActiveTargetItem();
-            if (!item) return;
-
-            item.mediaType = 'video';
-            item.driveId = '';
-            item.imageUrl = '';
-
-            closeDriveModal();
-            renderPortfolio();
-            savePortfolio(true);
-        }
-
-        /**
-         * Controles para el Modal de Video de Fondo de la Portada (Hero 100vh)
-         */
-        function openHeroVideoModal() {
-            if (!isEditMode) return;
-            savePortfolio(false);
-
-            const input = document.getElementById('hero-video-url-input');
-            const errorMsg = document.getElementById('hero-video-error-msg');
-            const fileLabel = document.getElementById('hero-video-file-label');
-
-            errorMsg.classList.add('hidden');
-            fileLabel.innerText = 'Seleccionar archivo de video MP4 o WebM';
-
-            const hv = state.heroVideo || defaultState.heroVideo;
-            if (hv.sourceType === 'drive' && hv.driveId) {
-                input.value = `https://drive.google.com/file/d/${hv.driveId}/view`;
-            } else if (hv.sourceType === 'url' && hv.videoUrl && hv.videoUrl !== DEFAULT_HERO_VIDEO_URL) {
-                input.value = hv.videoUrl;
-            } else {
-                input.value = '';
-            }
-
-            const modal = document.getElementById('hero-video-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            setTimeout(() => input.focus(), 50);
-        }
-
-        function closeHeroVideoModal() {
-            const modal = document.getElementById('hero-video-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function applyHeroVideoUrl() {
-            const rawUrl = document.getElementById('hero-video-url-input').value.trim();
-            const errorMsg = document.getElementById('hero-video-error-msg');
-            const driveId = extractGoogleDriveId(rawUrl);
-
-            if (driveId) {
-                state.heroVideo = {
-                    sourceType: 'drive',
-                    driveId: driveId,
-                    videoUrl: ''
-                };
-            } else if (/^https?:\/\/.+/i.test(rawUrl)) {
-                state.heroVideo = {
-                    sourceType: 'url',
-                    driveId: '',
-                    videoUrl: rawUrl
-                };
-            } else {
-                errorMsg.classList.remove('hidden');
-                return;
-            }
-
-            renderHeroBackgroundVideo();
-            closeHeroVideoModal();
-            savePortfolio(true);
-        }
-
-        function handleHeroVideoUpload(event) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
-
-            document.getElementById('hero-video-file-label').innerText = file.name;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                state.heroVideo = {
-                    sourceType: 'local',
-                    driveId: '',
-                    videoUrl: e.target.result
-                };
-                renderHeroBackgroundVideo();
-                closeHeroVideoModal();
-                savePortfolio(true);
-            };
-            reader.readAsDataURL(file);
-            event.target.value = '';
-        }
-
-        function restoreDefaultHeroVideo() {
-            state.heroVideo = {
-                sourceType: 'url',
-                driveId: '',
-                videoUrl: DEFAULT_HERO_VIDEO_URL
-            };
-            renderHeroBackgroundVideo();
-            closeHeroVideoModal();
-            savePortfolio(true);
-        }
-
-        /**
-         * Controles para el Modal de Imagen de Fondo
-         */
-        function openBgModal() {
-            if (!isEditMode) return;
-            savePortfolio(false);
-
-            const input = document.getElementById('bg-url-input');
-            const errorMsg = document.getElementById('bg-error-msg');
-            const fileLabel = document.getElementById('bg-file-label');
-
-            errorMsg.classList.add('hidden');
-            fileLabel.innerText = 'Seleccionar archivo JPG, PNG o WebP';
-            input.value = (state.bgImage && !state.bgImage.startsWith('data:')) ? state.bgImage : '';
-
-            const modal = document.getElementById('bg-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            setTimeout(() => input.focus(), 50);
-        }
-
-        function closeBgModal() {
-            const modal = document.getElementById('bg-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function applyBgUrl() {
-            const rawUrl = document.getElementById('bg-url-input').value.trim();
-            const errorMsg = document.getElementById('bg-error-msg');
-
-            if (!rawUrl) {
-                errorMsg.classList.remove('hidden');
-                return;
-            }
-
-            state.bgImage = rawUrl;
-            applyBackgroundLayer();
-            closeBgModal();
-            savePortfolio(true);
-        }
-
-        function handleBgFileUpload(event) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
-
-            document.getElementById('bg-file-label').innerText = file.name;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    // Optimizar resolución máxima a 1920px para mantener fluidez y almacenamiento ligero
-                    const maxDim = 1920;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > maxDim || height > maxDim) {
-                        if (width > height) {
-                            height = Math.round((height * maxDim) / width);
-                            width = maxDim;
-                        } else {
-                            width = Math.round((width * maxDim) / height);
-                            height = maxDim;
-                        }
-                    }
-
-                    const canvas = document.createElement('canvas');
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    state.bgImage = canvas.toDataURL('image/jpeg', 0.82);
-                    applyBackgroundLayer();
-                    closeBgModal();
-                    savePortfolio(true);
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            event.target.value = '';
-        }
-
-        function restoreDefaultBg() {
-            state.bgImage = DEFAULT_BG_IMAGE;
-            applyBackgroundLayer();
-            closeBgModal();
-            savePortfolio(true);
-        }
-
-        /**
-         * Añade una nueva tarjeta a la sección 1 o 2
-         */
-        function addCardToSection(sectionNum) {
-            savePortfolio(false);
-            if (sectionNum === 1) {
-                state.section1Cards.push({
-                    id: `s1-${Date.now()}`,
-                    mediaType: 'video',
-                    driveId: '',
-                    imageUrl: '',
-                    description: 'DESCRIPCIÓN'
-                });
-            } else {
-                state.section2Cards.push({
-                    id: `s2-${Date.now()}`,
-                    mediaType: 'video',
-                    driveId: '',
-                    imageUrl: ''
-                });
-            }
-            renderPortfolio();
-            savePortfolio(true);
-        }
-
-        /**
-         * Elimina una tarjeta específica
-         */
-        function deleteCard(sectionNum, index) {
-            savePortfolio(false);
-            if (sectionNum === 1) {
-                state.section1Cards.splice(index, 1);
-            } else {
-                state.section2Cards.splice(index, 1);
-            }
-            renderPortfolio();
-            savePortfolio(true);
-        }
-
-        /**
-         * Modal de restauración de valores iniciales
-         */
-        function openResetModal() {
-            const modal = document.getElementById('reset-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeResetModal() {
-            const modal = document.getElementById('reset-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function confirmReset() {
-            localStorage.removeItem(STORAGE_KEY);
-            state = JSON.parse(JSON.stringify(defaultState));
-            closeResetModal();
-            renderPortfolio();
-            showToast('Plantilla restaurada');
-        }
-
-        /**
-         * Muestra una notificación sutil en la esquina inferior derecha
-         */
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').innerText = message;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 2600);
-        }
-
-        /**
-         * Exporta un archivo HTML autónomo, limpio y sin herramientas de edición listo para publicar
-         */
-        function exportCleanHTML() {
-            savePortfolio(false);
-
-            const hv = state.heroVideo || defaultState.heroVideo;
-            let exportedHeroVideoHTML = '';
-            if (hv.sourceType === 'drive' && hv.driveId) {
-                exportedHeroVideoHTML = `<iframe src="https://drive.google.com/file/d/${hv.driveId}/preview" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.78vh] min-w-full h-[56.25vw] min-h-full border-0 opacity-75 pointer-events-none" allow="autoplay; fullscreen" loading="eager"></iframe>`;
-            } else {
-                const videoSrc = hv.videoUrl || DEFAULT_HERO_VIDEO_URL;
-                exportedHeroVideoHTML = `<video src="${escapeHTML(videoSrc)}" poster="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2000&q=80" autoplay loop muted playsinline class="w-full h-full object-cover opacity-80 scale-[1.01]"></video>`;
-            }
-
-            const renderExportMediaInner = (item) => {
-                const type = item.mediaType || 'video';
-                if (type === 'video' && item.driveId) {
-                    return `<iframe src="https://drive.google.com/file/d/${item.driveId}/preview" class="w-full h-full border-0" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>`;
-                }
-                const imgSrc = type === 'image' ? resolveImageSource(item) : '';
-                if (type === 'image' && imgSrc) {
-                    const fallbackAttr = item.driveId
-                        ? `onerror="this.onerror=null;this.src='https://drive.google.com/uc?export=view&id=${item.driveId}';"`
-                        : '';
-                    return `<img src="${escapeHTML(imgSrc)}" alt="Proyecto audiovisual" ${fallbackAttr} class="w-full h-full object-cover" loading="lazy" />`;
-                }
-                return `<div class="w-full h-full flex items-center justify-center text-xs tracking-widest uppercase text-zinc-500">VIDEO</div>`;
-            };
-
-            const renderExportCard = (card, hasDesc) => {
-                const descBlock = hasDesc
-                    ? `<div class="mt-3 pt-0.5"><p class="text-xs sm:text-sm font-normal text-[#D1D5DB] leading-relaxed">${escapeHTML(card.description)}</p></div>`
-                    : '';
-
-                return `
-                <article class="bg-[#18191D]/90 backdrop-blur-md border border-[#2A2D34]/80 hover:border-[#3E424B] rounded-xl p-3.5 transition-all duration-300 flex flex-col justify-between shadow-lg shadow-black/30">
-                    <div class="relative w-full aspect-video bg-[#0B0B0D] rounded-lg overflow-hidden border border-[#2A2D34]/60">
-                        ${renderExportMediaInner(card)}
-                    </div>
-                    ${descBlock}
-                </article>`;
-            };
-
-            const exportedBgUrl = (state.bgImage || DEFAULT_BG_IMAGE).replace(/"/g, '\\"');
-
-            const cleanHTML = `<!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${escapeHTML(state.name)} — Portafolio Audiovisual</title>
-    <script src="https://cdn.tailwindcss.com"><\/script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #0B0B0D;
-            color: #F4F4F5;
-            -webkit-font-smoothing: antialiased;
-        }
-        .bg-backdrop-image {
-            background-image: url("${exportedBgUrl}");
-            background-position: center center;
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-        .bg-backdrop-overlay {
-            background: 
-                radial-gradient(circle at 20% 15%, rgba(30, 32, 37, 0.45) 0%, rgba(11, 11, 13, 0.88) 65%),
-                linear-gradient(180deg, rgba(11, 11, 13, 0.72) 0%, rgba(11, 11, 13, 0.88) 45%, rgba(11, 11, 13, 0.96) 100%);
-        }
-        .hero-video-vignette {
-            background:
-                linear-gradient(90deg, rgba(11, 11, 13, 0.82) 0%, rgba(11, 11, 13, 0.42) 55%, rgba(11, 11, 13, 0.25) 100%),
-                linear-gradient(0deg, #0B0B0D 0%, rgba(11, 11, 13, 0.65) 28%, rgba(11, 11, 13, 0.2) 65%, rgba(11, 11, 13, 0.5) 100%);
-        }
-        .vertical-scroll-text {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-        }
-        @keyframes scrollLinePulse {
-            0% { transform: scaleY(0); transform-origin: top; opacity: 0.2; }
-            50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
-            51% { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
-            100% { transform: scaleY(0); transform-origin: bottom; opacity: 0.2; }
-        }
-        .animate-scroll-line {
-            animation: scrollLinePulse 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-        }
-        .reveal-on-scroll {
-            opacity: 0;
-            transform: translateY(36px);
-            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal-on-scroll.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
-</head>
-<body class="min-h-screen pb-24 relative bg-[#0B0B0D]">
-    <div aria-hidden="true" class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-        <div class="absolute inset-0 bg-backdrop-image opacity-45 scale-105"></div>
-        <div class="absolute inset-0 bg-backdrop-overlay backdrop-blur-[2px]"></div>
-    </div>
-
-    <section class="relative w-full h-screen min-h-[600px] overflow-hidden flex items-end bg-[#0B0B0D]">
-        <div class="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
-            ${exportedHeroVideoHTML}
-        </div>
-        <div aria-hidden="true" class="absolute inset-0 z-10 hero-video-vignette pointer-events-none"></div>
-        <div class="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-10 pb-16 sm:pb-24 flex items-end justify-between gap-6">
-            <div class="max-w-2xl">
-                <p class="text-[11px] sm:text-xs font-medium tracking-[0.28em] uppercase text-zinc-300/85 mb-4">
-                    ${escapeHTML(state.badge || 'PRODUCTOR AUDIOVISUAL · LIMA, PERÚ')}
-                </p>
-                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-zinc-100 uppercase leading-[1.04] mb-5">
-                    ${escapeHTML(state.name)}
-                </h1>
-                <p class="text-sm sm:text-base font-normal text-zinc-300/90 leading-relaxed max-w-xl mb-8">
-                    ${escapeHTML(state.subtitle)}
-                </p>
-                <a href="#proyectos" class="inline-flex items-center gap-3 px-6 py-3 border border-zinc-300/45 hover:border-zinc-100 hover:bg-white/10 text-zinc-100 text-[11px] font-medium tracking-[0.22em] uppercase transition-all duration-300 backdrop-blur-[2px]">
-                    <span>${escapeHTML(state.ctaText || 'VER PROYECTOS')}</span>
-                    <span aria-hidden="true" class="text-xs">→</span>
-                </a>
-            </div>
-            <a href="#proyectos" aria-label="Desplazar hacia abajo" class="hidden sm:flex flex-col items-center gap-3 text-zinc-400 hover:text-zinc-100 transition-colors pb-1">
-                <span class="vertical-scroll-text text-[10px] font-medium tracking-[0.35em] uppercase">SCROLL</span>
-                <span class="w-[1px] h-12 bg-zinc-700 overflow-hidden relative block">
-                    <span class="absolute inset-0 bg-zinc-200 animate-scroll-line"></span>
-                </span>
-            </a>
-        </div>
+    <!-- 2. SECCIONES DE PROYECTOS (SIN CUADROS DE DESCRIPCIÓN) -->
+    <section id="proyectos" class="w-full max-w-7xl mx-auto px-6 sm:px-10 py-20 sm:py-28 space-y-20">
+      <div id="sections-container" class="space-y-20"></div>
+
+      <!-- Botón para añadir una nueva sección completa (solo visible en modo edición) -->
+      <div class="edit-only hidden pt-4 border-t border-zinc-900 flex justify-center">
+        <button type="button" onclick="addSection()" class="px-4 py-2.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 text-xs font-medium text-zinc-300 hover:text-white transition flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          Añadir nueva sección
+        </button>
+      </div>
     </section>
+  </main>
 
-    <main id="proyectos" class="relative z-20 max-w-7xl mx-auto px-5 sm:px-8 pt-16 sm:pt-24 scroll-mt-12">
-        <section class="reveal-on-scroll mb-16 sm:mb-24">
-            <h2 class="text-lg sm:text-xl font-semibold tracking-wide uppercase text-zinc-200 mb-6">
-                ${escapeHTML(state.section1Title)}
-            </h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-                ${state.section1Cards.map(c => renderExportCard(c, true)).join('')}
-            </div>
-        </section>
+  <!-- FOOTER MINIMALISTA -->
+  <footer class="border-t border-zinc-900/90 py-10 px-6 sm:px-10">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+      <p id="footer-copy" data-field="footerCopy" class="editable-text">© 2026 André Arias · Portafolio Audiovisual</p>
+      <p id="footer-location" data-field="footerLocation" class="editable-text tracking-widest uppercase text-[11px]">Lima, Perú</p>
+    </div>
+  </footer>
 
-        <section class="reveal-on-scroll mb-12">
-            <h2 class="text-lg sm:text-xl font-semibold tracking-wide uppercase text-zinc-200 mb-6">
-                ${escapeHTML(state.section2Title)}
-            </h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-                ${state.section2Cards.map(c => renderExportCard(c, false)).join('')}
+  <!-- MODAL 1: EDITAR VIDEO DE FONDO DE PORTADA -->
+  <div id="hero-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-2xl bg-[#121216] border border-zinc-800 p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-300">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="text-base font-semibold text-white">Video de Fondo de Portada</h3>
+        </div>
+        <button type="button" onclick="closeHeroModal()" class="text-zinc-500 hover:text-white transition p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <p class="text-xs text-zinc-400 leading-relaxed">
+        Usa <code class="text-zinc-200 bg-zinc-900 px-1.5 py-0.5 rounded">./hero.mp4</code> (recomendado para bucle automático en GitHub Pages), una URL directa <strong class="text-zinc-200">.mp4 / .webm</strong> o un enlace público de <strong class="text-zinc-200">Google Drive</strong>.
+      </p>
+
+      <div class="space-y-2">
+        <label for="hero-url-input" class="block text-xs font-medium text-zinc-300">URL directa (.mp4) o enlace de Google Drive</label>
+        <input id="hero-url-input" type="text" placeholder="./hero.mp4 o https://drive.google.com/file/d/..." class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 focus:border-white focus:outline-none text-xs text-white placeholder-zinc-600" />
+      </div>
+
+      <div class="relative flex items-center justify-center">
+        <div class="border-t border-zinc-800/80 w-full"></div>
+        <span class="bg-[#121216] px-3 text-[10px] tracking-widest uppercase text-zinc-500">O sube desde tu PC (máx. 4 MB)</span>
+        <div class="border-t border-zinc-800/80 w-full"></div>
+      </div>
+
+      <div>
+        <label class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-zinc-700 hover:border-zinc-500 bg-zinc-950/60 hover:bg-zinc-900/60 text-xs font-medium text-zinc-300 cursor-pointer transition">
+          <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+          <span id="hero-file-label">Seleccionar archivo MP4 o WebM</span>
+          <input id="hero-file-input" type="file" accept="video/mp4,video/webm" class="hidden" onchange="handleHeroFileSelect(event)" />
+        </label>
+      </div>
+
+      <p id="hero-modal-error" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-900/60 rounded-lg px-3 py-2"></p>
+
+      <div class="flex items-center justify-between pt-2">
+        <button type="button" onclick="resetHeroToDefault()" class="text-xs text-zinc-400 hover:text-white transition">
+          Usar ./hero.mp4
+        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="closeHeroModal()" class="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-xs font-medium text-zinc-300 transition">
+            Cancelar
+          </button>
+          <button type="button" onclick="applyHeroMedia()" class="px-4 py-2 rounded-xl bg-white hover:bg-zinc-200 text-xs font-semibold text-zinc-950 transition">
+            Aplicar Video
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: EDITAR ENLACE DE BLOQUE (GOOGLE DRIVE / VIDEO / IMAGEN) -->
+  <div id="card-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-2xl bg-[#121216] border border-zinc-800 p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-semibold text-white">Configurar Video o Imagen</h3>
+        <button type="button" onclick="closeCardModal()" class="text-zinc-500 hover:text-white transition p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Selector de tipo de medio -->
+      <div class="grid grid-cols-2 gap-2 p-1 rounded-xl bg-zinc-950 border border-zinc-800/80">
+        <button type="button" id="type-btn-video" onclick="setCardMediaType('video')" class="py-2 rounded-lg text-xs font-semibold bg-zinc-800 text-white transition">
+          Video (Drive / MP4)
+        </button>
+        <button type="button" id="type-btn-image" onclick="setCardMediaType('image')" class="py-2 rounded-lg text-xs font-medium text-zinc-400 hover:text-white transition">
+          Imagen (Drive / URL)
+        </button>
+      </div>
+
+      <div class="space-y-2">
+        <label for="card-url-input" class="block text-xs font-medium text-zinc-300">Enlace de Google Drive o URL directa</label>
+        <input id="card-url-input" type="text" placeholder="https://drive.google.com/file/d/..." class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 focus:border-white focus:outline-none text-xs text-white placeholder-zinc-600" />
+        <p class="text-[11px] text-zinc-500">
+          En Google Drive: Compartir → <span class="text-zinc-300">Cualquier persona con el enlace (Lector)</span>.
+        </p>
+      </div>
+
+      <p id="card-modal-error" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-900/60 rounded-lg px-3 py-2"></p>
+
+      <div class="flex items-center justify-between pt-2">
+        <button type="button" onclick="clearCardMedia()" class="text-xs text-zinc-400 hover:text-red-400 transition">
+          Vaciar cuadro
+        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="closeCardModal()" class="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-xs font-medium text-zinc-300 transition">
+            Cancelar
+          </button>
+          <button type="button" onclick="applyCardMedia()" class="px-4 py-2 rounded-xl bg-white hover:bg-zinc-200 text-xs font-semibold text-zinc-950 transition">
+            Guardar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: CONFIRMACIÓN DE REINICIO -->
+  <div id="reset-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-sm rounded-2xl bg-[#121216] border border-zinc-800 p-6 shadow-2xl space-y-4">
+      <h3 class="text-base font-semibold text-white">¿Restaurar portafolio base?</h3>
+      <p class="text-xs text-zinc-400 leading-relaxed">
+        Se limpiarán los cambios guardados localmente en este navegador y se volverá a la estructura limpia inicial.
+      </p>
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button type="button" onclick="closeResetModal()" class="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-xs font-medium text-zinc-300 transition">
+          Cancelar
+        </button>
+        <button type="button" onclick="confirmReset()" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-semibold text-white transition">
+          Sí, reiniciar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICACIÓN FLOTANTE (TOAST) -->
+  <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-full bg-zinc-900 border border-zinc-700 text-xs font-medium text-white shadow-2xl"></div>
+
+  <!-- DATOS INICIALES EMBEBIDOS (ACTUALIZADOS AUTOMÁTICAMENTE AL EXPORTAR) -->
+  <script id="portfolio-initial-data" type="application/json">
+  {
+    "hero": {
+      "subtitle": "PRODUCTOR AUDIOVISUAL · LIMA, PERÚ",
+      "title": "ANDRÉ ARIAS",
+      "bio": "Dirección audiovisual, montaje y narrativa visual minimalista para marcas, cine documental y proyectos comerciales.",
+      "cta": "VER PROYECTOS",
+      "mediaUrl": "./hero.mp4"
+    },
+    "footer": {
+      "footerCopy": "© 2026 André Arias · Portafolio Audiovisual",
+      "footerLocation": "Lima, Perú"
+    },
+    "sections": [
+      {
+        "id": "sec-1",
+        "title": "PROYECTOS DESTACADOS",
+        "items": [
+          { "id": "item-1", "url": "", "type": "video" },
+          { "id": "item-2", "url": "", "type": "video" },
+          { "id": "item-3", "url": "", "type": "video" },
+          { "id": "item-4", "url": "", "type": "video" },
+          { "id": "item-5", "url": "", "type": "video" },
+          { "id": "item-6", "url": "", "type": "video" },
+          { "id": "item-7", "url": "", "type": "video" },
+          { "id": "item-8", "url": "", "type": "video" }
+        ]
+      },
+      {
+        "id": "sec-2",
+        "title": "STREAMING & PODCAST",
+        "items": [
+          { "id": "item-9", "url": "", "type": "video" },
+          { "id": "item-10", "url": "", "type": "video" },
+          { "id": "item-11", "url": "", "type": "video" },
+          { "id": "item-12", "url": "", "type": "video" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <script>
+    // Bandera de arranque: en el archivo exportado público siempre es false (solo abre editor con ?editar=1 o Ctrl+E)
+    const DEFAULT_EDIT_MODE = true;
+    const STORAGE_KEY = 'portafolio_andre_v3_clean';
+
+    let state = null;
+    let isEditMode = false;
+    let isPreviewing = false;
+    let activeCardTarget = { sectionId: null, itemId: null, mediaType: 'video' };
+    let pendingHeroDataUrl = null;
+
+    // Extrae el ID de archivo desde cualquier enlace estándar de Google Drive
+    function extractDriveId(url) {
+      if (!url) return null;
+      const clean = url.trim();
+      const patterns = [
+        /\/file\/d\/([a-zA-Z0-9_-]+)/,
+        /[?&]id=([a-zA-Z0-9_-]+)/,
+        /\/d\/([a-zA-Z0-9_-]+)/
+      ];
+      for (const regex of patterns) {
+        const match = clean.match(regex);
+        if (match && match[1]) return match[1];
+      }
+      return null;
+    }
+
+    // Genera el HTML exacto del reproductor según tipo de enlace (sin bordes ni recortes)
+    function buildMediaHTML(url, type = 'video', isHero = false) {
+      if (!url || !url.trim()) return '';
+      const cleanUrl = url.trim();
+      const driveId = extractDriveId(cleanUrl);
+
+      if (driveId) {
+        if (type === 'image') {
+          const thumbUrl = `https://drive.google.com/thumbnail?id=${driveId}&sz=w1600`;
+          return `<img src="${thumbUrl}" alt="Proyecto audiovisual" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/1280x720/121216/71717a?text=Verifica+permisos+en+Drive';" />`;
+        }
+        const previewUrl = `https://drive.google.com/file/d/${driveId}/preview`;
+        return `<iframe src="${previewUrl}" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>`;
+      }
+
+      // Video directo (.mp4, .webm o data URL)
+      const isDirectVideo = isHero || type === 'video' && (
+        /\.(mp4|webm|ogg)(\?.*)?$/i.test(cleanUrl) ||
+        cleanUrl.startsWith('./') ||
+        cleanUrl.startsWith('data:video/')
+      );
+
+      if (isDirectVideo) {
+        if (isHero) {
+          return `<video src="${cleanUrl}" autoplay loop muted playsinline preload="auto"></video>`;
+        }
+        return `<video src="${cleanUrl}" controls playsinline preload="metadata"></video>`;
+      }
+
+      // Imagen directa
+      return `<img src="${cleanUrl}" alt="Proyecto audiovisual" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/1280x720/121216/71717a?text=Imagen+no+disponible';" />`;
+    }
+
+    // Carga el estado inicial desde el bloque JSON embebido o desde localStorage en modo edición
+    function loadState() {
+      const embeddedScript = document.getElementById('portfolio-initial-data');
+      const baseData = JSON.parse(embeddedScript.textContent);
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const forcedEdit = urlParams.get('editar') === '1';
+      isEditMode = forcedEdit ? true : DEFAULT_EDIT_MODE;
+
+      if (isEditMode) {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            state = JSON.parse(saved);
+            return;
+          }
+        } catch (e) {
+          console.warn('No se pudo leer localStorage:', e);
+        }
+      }
+      state = baseData;
+    }
+
+    function saveState() {
+      if (!isEditMode) return;
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        showToast('Aviso: el archivo es muy pesado para la memoria temporal, recuerda usar Exportar Web.');
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.remove('hidden');
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3200);
+    }
+
+    // Renderiza toda la página (Hero, secciones limpias sin descripción y pie de página)
+    function renderAll() {
+      const activeEditing = isEditMode && !isPreviewing;
+
+      document.body.classList.toggle('editing-active', activeEditing);
+      document.getElementById('editor-toolbar').classList.toggle('hidden', !activeEditing);
+      document.getElementById('exit-preview-fab').classList.toggle('hidden', !(isEditMode && isPreviewing));
+
+      document.querySelectorAll('.edit-only').forEach(el => {
+        el.classList.toggle('hidden', !activeEditing);
+      });
+
+      // Hero textos
+      const subtitleEl = document.getElementById('hero-subtitle');
+      const titleEl = document.getElementById('hero-title');
+      const bioEl = document.getElementById('hero-bio');
+      const ctaEl = document.getElementById('hero-cta');
+
+      subtitleEl.textContent = state.hero.subtitle;
+      titleEl.textContent = state.hero.title;
+      bioEl.textContent = state.hero.bio;
+      ctaEl.textContent = state.hero.cta;
+
+      // Hero media
+      const heroContainer = document.getElementById('hero-media-container');
+      const heroHtml = buildMediaHTML(state.hero.mediaUrl, 'video', true);
+      heroContainer.innerHTML = heroHtml || `<div class="w-full h-full bg-zinc-950"></div>`;
+
+      const heroVideo = heroContainer.querySelector('video');
+      if (heroVideo) {
+        heroVideo.muted = true;
+        heroVideo.play().catch(() => {});
+      }
+
+      // Footer textos
+      document.getElementById('footer-copy').textContent = state.footer.footerCopy;
+      document.getElementById('footer-location').textContent = state.footer.footerLocation;
+
+      // Configurar edición inline en textos globales
+      document.querySelectorAll('.editable-text').forEach(el => {
+        if (activeEditing) {
+          el.setAttribute('contenteditable', 'true');
+          el.oninput = () => {
+            const field = el.dataset.field;
+            if (field in state.hero) {
+              state.hero[field] = el.textContent;
+            } else if (field in state.footer) {
+              state.footer[field] = el.textContent;
+            }
+            saveState();
+          };
+        } else {
+          el.removeAttribute('contenteditable');
+          el.oninput = null;
+        }
+      });
+
+      // Renderizar secciones de proyectos (tarjetas 16:9 puras, sin cuadros de descripción)
+      const sectionsContainer = document.getElementById('sections-container');
+      sectionsContainer.innerHTML = '';
+
+      state.sections.forEach((section, secIndex) => {
+        const secEl = document.createElement('div');
+        secEl.className = 'space-y-6';
+
+        // Cabecera de sección
+        const headerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <h2
+              data-sec-id="${section.id}"
+              class="section-title text-lg sm:text-xl font-bold tracking-[0.14em] uppercase text-white"
+              ${activeEditing ? 'contenteditable="true"' : ''}
+            >${escapeHTML(section.title)}</h2>
+
+            ${activeEditing ? `
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="addBlock('${section.id}')" class="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-medium text-zinc-200 transition flex items-center gap-1.5">
+                  <span>+</span> Añadir bloque
+                </button>
+                ${state.sections.length > 1 ? `
+                  <button type="button" onclick="deleteSection('${section.id}')" title="Eliminar sección" class="p-1.5 rounded-lg bg-zinc-900 hover:bg-red-950/70 border border-zinc-800 hover:border-red-900 text-zinc-400 hover:text-red-400 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                  </button>
+                ` : ''}
+              </div>
+            ` : ''}
+          </div>
+        `;
+
+        // Cuadrícula de 4 columnas (sin textos ni cajas inferiores)
+        const gridEl = document.createElement('div');
+        gridEl.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5';
+
+        section.items.forEach(item => {
+          const hasMedia = Boolean(item.url && item.url.trim());
+          // En modo público, si un cuadro quedó vacío no se muestra hueco roto; si tiene enlace, se muestra limpio
+          if (!activeEditing && !hasMedia) return;
+
+          const card = document.createElement('article');
+          card.className = 'group relative rounded-xl bg-surface border border-borderline overflow-hidden shadow-lg transition-all duration-300 hover:border-zinc-700';
+
+          const mediaContent = hasMedia
+            ? buildMediaHTML(item.url, item.type || 'video', false)
+            : `
+              <button type="button" onclick="openCardModal('${section.id}', '${item.id}')" class="absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-2.5 p-4 text-center hover:bg-zinc-900/70 transition cursor-pointer">
+                <div class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-300 group-hover:scale-105 group-hover:border-white group-hover:text-white transition">
+                  <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+                <span class="text-[11px] font-semibold tracking-[0.16em] uppercase text-zinc-200">VIDEO / IMAGEN</span>
+                <span class="text-[11px] text-zinc-500">+ Pegar link de Google Drive o imagen</span>
+              </button>
+            `;
+
+          const editOverlay = activeEditing ? `
+            <div class="absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5">
+              <button type="button" onclick="openCardModal('${section.id}', '${item.id}')" class="px-2.5 py-1.5 rounded-lg bg-zinc-950/90 hover:bg-black border border-zinc-700/90 text-[11px] font-medium text-zinc-200 backdrop-blur-md transition flex items-center gap-1.5 shadow-md">
+                <svg class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                ${hasMedia ? 'Cambiar enlace' : 'Enlazar'}
+              </button>
+              <button type="button" onclick="deleteBlock('${section.id}', '${item.id}')" title="Eliminar bloque" class="w-7 h-7 rounded-lg bg-zinc-950/90 hover:bg-red-950 border border-zinc-700/90 hover:border-red-800 text-zinc-400 hover:text-red-300 flex items-center justify-center text-xs transition shadow-md">
+                ×
+              </button>
             </div>
-        </section>
-    </main>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.12 });
-            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+          ` : '';
+
+          card.innerHTML = `
+            <div class="media-frame">
+              ${mediaContent}
+              ${editOverlay}
+            </div>
+          `;
+
+          gridEl.appendChild(card);
         });
-    <\/script>
+
+        secEl.innerHTML = headerHTML;
+        secEl.appendChild(gridEl);
+        sectionsContainer.appendChild(secEl);
+      });
+
+      // Listeners para edición de títulos de sección
+      if (activeEditing) {
+        document.querySelectorAll('.section-title').forEach(el => {
+          el.oninput = () => {
+            const sec = state.sections.find(s => s.id === el.dataset.secId);
+            if (sec) {
+              sec.title = el.textContent;
+              saveState();
+            }
+          };
+        });
+      }
+    }
+
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // Gestión de secciones y bloques
+    function addBlock(sectionId) {
+      const sec = state.sections.find(s => s.id === sectionId);
+      if (!sec) return;
+      sec.items.push({
+        id: 'item-' + Date.now(),
+        url: '',
+        type: 'video'
+      });
+      saveState();
+      renderAll();
+    }
+
+    function deleteBlock(sectionId, itemId) {
+      const sec = state.sections.find(s => s.id === sectionId);
+      if (!sec) return;
+      sec.items = sec.items.filter(i => i.id !== itemId);
+      saveState();
+      renderAll();
+    }
+
+    function addSection() {
+      const uid = Date.now();
+      state.sections.push({
+        id: 'sec-' + uid,
+        title: 'NUEVA SECCIÓN',
+        items: [
+          { id: 'item-' + uid + '-1', url: '', type: 'video' },
+          { id: 'item-' + uid + '-2', url: '', type: 'video' },
+          { id: 'item-' + uid + '-3', url: '', type: 'video' },
+          { id: 'item-' + uid + '-4', url: '', type: 'video' }
+        ]
+      });
+      saveState();
+      renderAll();
+    }
+
+    function deleteSection(sectionId) {
+      state.sections = state.sections.filter(s => s.id !== sectionId);
+      saveState();
+      renderAll();
+    }
+
+    // Modal Hero Video
+    function openHeroModal() {
+      pendingHeroDataUrl = null;
+      document.getElementById('hero-url-input').value = state.hero.mediaUrl || './hero.mp4';
+      document.getElementById('hero-file-label').textContent = 'Seleccionar archivo MP4 o WebM';
+      document.getElementById('hero-modal-error').classList.add('hidden');
+      document.getElementById('hero-modal').classList.remove('hidden');
+    }
+
+    function closeHeroModal() {
+      document.getElementById('hero-modal').classList.add('hidden');
+    }
+
+    function handleHeroFileSelect(event) {
+      const file = event.target.files[0];
+      const errEl = document.getElementById('hero-modal-error');
+      errEl.classList.add('hidden');
+      if (!file) return;
+
+      if (file.size > 4.5 * 1024 * 1024) {
+        errEl.textContent = 'El archivo supera los 4.5 MB. Para videos pesados súbelo como hero.mp4 a GitHub y escribe ./hero.mp4 arriba.';
+        errEl.classList.remove('hidden');
+        event.target.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        pendingHeroDataUrl = e.target.result;
+        document.getElementById('hero-file-label').textContent = file.name;
+        document.getElementById('hero-url-input').value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetHeroToDefault() {
+      pendingHeroDataUrl = null;
+      document.getElementById('hero-url-input').value = './hero.mp4';
+      applyHeroMedia();
+    }
+
+    function applyHeroMedia() {
+      const errEl = document.getElementById('hero-modal-error');
+      errEl.classList.add('hidden');
+
+      if (pendingHeroDataUrl) {
+        state.hero.mediaUrl = pendingHeroDataUrl;
+        saveState();
+        renderAll();
+        closeHeroModal();
+        showToast('Video de portada actualizado');
+        return;
+      }
+
+      const rawUrl = document.getElementById('hero-url-input').value.trim();
+      if (!rawUrl) {
+        errEl.textContent = 'Ingresa ./hero.mp4, una URL directa .mp4 o un enlace de Google Drive.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      state.hero.mediaUrl = rawUrl;
+      saveState();
+      renderAll();
+      closeHeroModal();
+      showToast('Video de portada actualizado');
+    }
+
+    // Modal Tarjeta Individual
+    function openCardModal(sectionId, itemId) {
+      const sec = state.sections.find(s => s.id === sectionId);
+      const item = sec ? sec.items.find(i => i.id === itemId) : null;
+      if (!item) return;
+
+      activeCardTarget = {
+        sectionId,
+        itemId,
+        mediaType: item.type || 'video'
+      };
+
+      document.getElementById('card-url-input').value = item.url || '';
+      document.getElementById('card-modal-error').classList.add('hidden');
+      setCardMediaType(activeCardTarget.mediaType);
+      document.getElementById('card-modal').classList.remove('hidden');
+    }
+
+    function closeCardModal() {
+      document.getElementById('card-modal').classList.add('hidden');
+    }
+
+    function setCardMediaType(type) {
+      activeCardTarget.mediaType = type;
+      const btnVid = document.getElementById('type-btn-video');
+      const btnImg = document.getElementById('type-btn-image');
+
+      if (type === 'video') {
+        btnVid.className = 'py-2 rounded-lg text-xs font-semibold bg-zinc-800 text-white transition';
+        btnImg.className = 'py-2 rounded-lg text-xs font-medium text-zinc-400 hover:text-white transition';
+      } else {
+        btnImg.className = 'py-2 rounded-lg text-xs font-semibold bg-zinc-800 text-white transition';
+        btnVid.className = 'py-2 rounded-lg text-xs font-medium text-zinc-400 hover:text-white transition';
+      }
+    }
+
+    function applyCardMedia() {
+      const rawUrl = document.getElementById('card-url-input').value.trim();
+      const errEl = document.getElementById('card-modal-error');
+      errEl.classList.add('hidden');
+
+      if (!rawUrl) {
+        errEl.textContent = 'Pega un enlace válido de Google Drive o una URL directa.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      const sec = state.sections.find(s => s.id === activeCardTarget.sectionId);
+      const item = sec ? sec.items.find(i => i.id === activeCardTarget.itemId) : null;
+      if (item) {
+        item.url = rawUrl;
+        item.type = activeCardTarget.mediaType;
+        saveState();
+        renderAll();
+        closeCardModal();
+        showToast('Bloque actualizado');
+      }
+    }
+
+    function clearCardMedia() {
+      const sec = state.sections.find(s => s.id === activeCardTarget.sectionId);
+      const item = sec ? sec.items.find(i => i.id === activeCardTarget.itemId) : null;
+      if (item) {
+        item.url = '';
+        saveState();
+        renderAll();
+        closeCardModal();
+        showToast('Cuadro vaciado');
+      }
+    }
+
+    // Vista previa y reinicio
+    function togglePreviewMode() {
+      isPreviewing = !isPreviewing;
+      renderAll();
+    }
+
+    function openResetModal() {
+      document.getElementById('reset-modal').classList.remove('hidden');
+    }
+
+    function closeResetModal() {
+      document.getElementById('reset-modal').classList.add('hidden');
+    }
+
+    function confirmReset() {
+      localStorage.removeItem(STORAGE_KEY);
+      const embeddedScript = document.getElementById('portfolio-initial-data');
+      state = JSON.parse(embeddedScript.textContent);
+      closeResetModal();
+      renderAll();
+      showToast('Portafolio restaurado a los valores limpios');
+    }
+
+    // Exportar HTML público autocontenido sin modo edición por defecto
+    function exportCleanHTML() {
+      const docClone = document.documentElement.cloneNode(true);
+
+      // Limpiar estados visuales temporales antes de serializar
+      const bodyClone = docClone.querySelector('body');
+      bodyClone.classList.remove('editing-active');
+
+      const toolbarClone = docClone.querySelector('#editor-toolbar');
+      if (toolbarClone) toolbarClone.classList.add('hidden');
+
+      const fabClone = docClone.querySelector('#exit-preview-fab');
+      if (fabClone) fabClone.classList.add('hidden');
+
+      docClone.querySelectorAll('.edit-only').forEach(el => el.classList.add('hidden'));
+      docClone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+
+      // Incrustar datos actuales en el script JSON
+      const dataScript = docClone.querySelector('#portfolio-initial-data');
+      if (dataScript) {
+        dataScript.textContent = '\n' + JSON.stringify(state, null, 2) + '\n  ';
+      }
+
+      // Desactivar DEFAULT_EDIT_MODE en el archivo exportado público
+      let finalHTML = '<!DOCTYPE html>\n' + docClone.outerHTML;
+      finalHTML = finalHTML.replace('const DEFAULT_EDIT_MODE = true;', 'const DEFAULT_EDIT_MODE = false;');
+
+      const blob = new Blob([finalHTML], { type: 'text/html;charset=utf-8' });
+      const downloadUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = 'index.html';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(downloadUrl);
+
+      showToast('Descargado como index.html listo para subir a GitHub');
+    }
+
+    // Atajo secreto Ctrl+E / Cmd+E para entrar o salir del modo edición en la web publicada
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
+        e.preventDefault();
+        isEditMode = !isEditMode;
+        isPreviewing = false;
+        renderAll();
+        showToast(isEditMode ? 'Modo Edición activado' : 'Modo Público activado');
+      }
+    });
+
+    // Inicialización al cargar
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      renderAll();
+    });
+  </script>
 </body>
-</html>`;
-
-            const blob = new Blob([cleanHTML], { type: 'text/html;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            const safeFilename = (state.name || 'portafolio').toLowerCase().replace(/[^a-z0-9]+/g, '_');
-            a.href = url;
-            a.download = `${safeFilename}_portafolio.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
-            showToast('Archivo HTML exportado listo para publicar');
-        }
-
-        // Permitir guardar enlace de Drive presionando Enter dentro del input
-        document.getElementById('drive-url-input').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                applyDriveVideo();
-            } else if (e.key === 'Escape') {
-                closeDriveModal();
-            }
-        });
-
-        // Permitir aplicar video de portada con Enter o cerrar con Escape
-        document.getElementById('hero-video-url-input').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                applyHeroVideoUrl();
-            } else if (e.key === 'Escape') {
-                closeHeroVideoModal();
-            }
-        });
-
-        // Permitir aplicar URL de fondo con Enter o cerrar con Escape
-        document.getElementById('bg-url-input').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                applyBgUrl();
-            } else if (e.key === 'Escape') {
-                closeBgModal();
-            }
-        });
-
-        // Inicialización al cargar la página
-        window.addEventListener('DOMContentLoaded', () => {
-            loadPortfolio();
-            renderPortfolio();
-        });
-    </script>
-
-</body></html>
+</html>
